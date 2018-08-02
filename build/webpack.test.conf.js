@@ -8,12 +8,9 @@ const baseWebpackConfig = require('./webpack.base.conf')
 
 let plugin
 
-try {
-  // check if file exists
-  require('./dev.env')
-  plugin = require('../config/test.env')
-} catch (e) {
-  // Ensuring environment variables for CI
+if (process.env.TRAVIS) {
+  console.log('On Travis sending coveralls')
+  // Ensuring environment variables for Travis
   plugin = {
     NODE_ENV: 'testing',
     API_KEY: process.env.API_KEY,
@@ -24,6 +21,9 @@ try {
     MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
     GOOGLE_MAPS_API: process.env.GOOGLE_MAPS_API
   }
+} else {
+  console.log('Not on Travis, get env variables from dev.env!')
+  plugin = require('../config/test.env')
 }
 
 const webpackConfig = merge(baseWebpackConfig, {

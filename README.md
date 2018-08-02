@@ -1,7 +1,7 @@
 # ~~Lost~~ and Found
 > Pin your lost and found items in the UCSC campus map!
 
-[![Build Status](https://travis-ci.org/VVNoodle/LoFo.svg?branch=BACKUP-MASTER)](https://travis-ci.org/VVNoodle/LoFo) [![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/VVNoodle/LoFo/blob/BACKUP-MASTER/LICENSE)
+[![Build Status](https://travis-ci.org/VVNoodle/LoFo.svg?branch=BACKUP-MASTER)](https://travis-ci.org/VVNoodle/LoFo) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Coverage Status](https://coveralls.io/repos/github/VVNoodle/LoFo/badge.svg)](https://coveralls.io/github/VVNoodle/LoFo)
 
 The idea began with the abundance of lost/found posts in the official UCSC Facebook page. In order to organize these posts and lessen the cluttering, we wanted to create something that can compile all these items onto a map. This will not only provide what Facebook already supported, but also generate a visual interface to locate items lost and items found.
 
