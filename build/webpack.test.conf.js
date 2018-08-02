@@ -15,7 +15,7 @@ try {
 } catch (e) {
   // Ensuring environment variables for CI
   plugin = {
-    NODE_ENV: process.env.NODE_ENV,
+    NODE_ENV: 'testing',
     API_KEY: process.env.API_KEY,
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
     DB_URL: process.env.DB_URL,
