@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import GMap from '@/components/home/GMap'
+import GMap from '@/components/MainPage/GMap'
 
 describe('GMap.vue', () => {
   it('checks that the submission form is closed, when component is first opened', () => {

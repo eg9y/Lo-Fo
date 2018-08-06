@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import firebase from 'firebase'
 import db from '@/firebase/init'
 
+// import * as 'actions' from './actions';
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -23,6 +25,14 @@ export default new Vuex.Store({
     lostToggle: true,
     foundToggle: true
   },
+  getters: {
+    firebase (state) {
+      return state.firebase
+    },
+    all_lost_items (state) {
+      return state.all_lost_items
+    }
+  },
   mutations: {
     setUser (state, user) {
       state.isUserLoggedIn = true
@@ -35,17 +45,29 @@ export default new Vuex.Store({
     stillLoading (state, loadingStatus) {
       state.stillLoading = loadingStatus
     },
-    setLostItems (state, documents) {
-      state.lost_items = documents
-    },
-    setFoundItems (state, documents) {
-      state.found_items = documents
-    },
     setAllLostItems (state, items) {
-      state.all_lost_items = items
+      state.all_lost_items = items.map((item) => {
+        item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
+        return item
+      }) || items
     },
     setAllFoundItems (state, items) {
-      state.all_found_items = items
+      state.all_found_items = items.map((item) => {
+        item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
+        return item
+      }) || items
+    },
+    setQueriedLostItems (state, items) {
+      state.queried_lost_items = items
+    },
+    setQueriedFoundItems (state, items) {
+      state.queried_found_items = items
+    },
+    setLostItems (state, items) {
+      state.lost_items = items
+    },
+    setFoundItems (state, items) {
+      state.found_items = items
     },
     // below four functions are for toggling lost/found pins
     setLostToggleTrue (state) {
@@ -59,21 +81,62 @@ export default new Vuex.Store({
     },
     setFoundToggleFalse (state) {
       state.foundToggle = false
+    }
+  },
+  actions: {
+    setUser ({ commit }, user) {
+      commit('setUser', user)
+    },
+    signOut ({ commit }) {
+      commit('signOut')
+    },
+    stillLoading ({ commit }, loadingStatus) {
+      commit('stillLoading', loadingStatus)
+    },
+    setAllLostItems ({ commit }, items) {
+      commit('setAllLostItems', items)
+    },
+    setAllFoundItems ({ commit }, items) {
+      commit('setAllFoundItems', items)
+    },
+    pushToCollection ({ commit }, colAndDoc) {
+      commit('pushToCollection', colAndDoc)
     },
     /*
       Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
     */
-    updateCollection (state, collectionName) {
+    updateCollection ({ commit }, collectionName) {
       let documents = []
-      state.db
+      this.state.db
         .collection(collectionName)
         .get()
         .then(items => {
           pushDocuments(items, documents)
           if (collectionName === 'lost-items') {
-            state.all_lost_items = documents
+            commit('setAllLostItems', documents)
           } else {
-            state.all_found_items = documents
+            commit('setAllFoundItems', documents)
+          }
+        })
+        .catch(function (error) {
+          console.log('Error getting documents: ', error)
+        })
+    },
+    /*
+      Fetches new submissions from firebase storage and updates the local copy of the user's lost/found entries
+    */
+    updateUserCollection ({ commit }, collectionName) {
+      let documents = []
+      this.state.db
+        .collection(collectionName)
+        .where('userID', '==', this.state.user.uid)
+        .get()
+        .then(items => {
+          pushDocuments(items, documents)
+          if (collectionName === 'lost-items') {
+            commit('setLostItems', documents)
+          } else {
+            commit('setFoundItems', documents)
           }
         })
         .catch(function (error) {
@@ -83,85 +146,28 @@ export default new Vuex.Store({
     /*
       Fetches new submissions from firebase storage and updates the local copy of all lost/found entries based on query
     */
-    updateCollectionQuery (state, query) {
+    updateCollectionQuery ({ commit }, query) {
       let documentsLost = []
-      state.db
+      this.state.db
         .collection('lost-items')
         .where('type', '==', query)
         .get()
         .then(lostItems => {
           pushDocuments(lostItems, documentsLost)
-          state.queried_lost_items = documentsLost
-
+          commit('setQueriedLostItems', documentsLost)
           let documentsFound = []
-          state.db
+          this.state.db
             .collection('found-items')
             .where('type', '==', query)
             .get()
             .then(foundItems => {
               pushDocuments(foundItems, documentsFound)
-              state.queried_found_items = documentsFound
+              commit('setQueriedFoundItems', documentsFound)
             })
         })
         .catch(function (error) {
           console.log('Error getting documents: ', error)
         })
-    },
-    /*
-      Fetches new submissions from firebase storage and updates the local copy of the user's lost/found entries
-    */
-    updateUserCollection (state, collectionName) {
-      let documents = []
-      state.db
-        .collection(collectionName)
-        .where('userID', '==', state.user.uid)
-        .get()
-        .then(items => {
-          pushDocuments(items, documents)
-          if (collectionName === 'lost-items') {
-            state.lost_items = documents
-          } else {
-            state.found_items = documents
-          }
-        })
-        .catch(function (error) {
-          console.log('Error getting documents: ', error)
-        })
-    }
-  },
-  actions: {
-    setUser ({commit}, user) {
-      commit('setUser', user)
-    },
-    signOut ({commit}) {
-      commit('signOut')
-    },
-    stillLoading ({commit}, loadingStatus) {
-      commit('stillLoading', loadingStatus)
-    },
-    setLostItems ({commit}, documents) {
-      commit('setLostItems', documents)
-    },
-    setFoundItems ({commit}, documents) {
-      commit('setFoundItems', documents)
-    },
-    setAllLostItems ({commit}, items) {
-      commit('setAllLostItems', items)
-    },
-    setAllFoundItems ({commit}, items) {
-      commit('setAllFoundItems', items)
-    },
-    pushToCollection ({commit}, colAndDoc) {
-      commit('pushToCollection', colAndDoc)
-    },
-    updateCollection ({commit}, collectionName) {
-      commit('updateCollection', collectionName)
-    },
-    updateUserCollection ({commit}, collectionName) {
-      commit('updateUserCollection', collectionName)
-    },
-    updateCollectionQuery ({commit}, query) {
-      commit('updateCollectionQuery', query)
     }
   }
 })

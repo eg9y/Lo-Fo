@@ -5,4 +5,7 @@ install:
   - npm install
 script:
   - npm run test
+cache:
+  directories:
+    - $HOME/.npm
 os: osx

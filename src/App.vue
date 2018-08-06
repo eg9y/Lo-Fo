@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Navbar from '@/components/layout/Navbar'
+import Navbar from '@/components/Navigation/Navbar'
 import { mapState } from 'vuex'
 
 export default {

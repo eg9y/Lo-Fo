@@ -7,18 +7,47 @@
         <v-form v-model="valid">
           <v-layout wrap>
             <v-flex xs12>
-              <v-text-field class="text-field" v-model="type" label="Item *" :hint="typeHint" counter="30" :maxlength="30" required :error-messages="typeErrors" @input="$v.type.$touch()" @blur="$v.type.$touch()"></v-text-field>
+              <v-text-field class="text-field"
+                            v-model="type"
+                            label="Item *"
+                            :hint="typeHint"
+                            counter="30"
+                            :maxlength="30"
+                            required
+                            :error-messages="typeErrors"
+                            @input="$v.type.$touch()"
+                            @blur="$v.type.$touch()"></v-text-field>
             </v-flex>
             <v-flex xs12>
-              <v-textarea v-model="description" :hint="descriptionHint" label="Item Description *" counter="150" :maxlength="150" required :error-messages="descriptionErrors" @input="$v.description.$touch()" @blur="$v.description.$touch()"></v-textarea>
+              <v-textarea v-model="description"
+                          :hint="descriptionHint"
+                          label="Item Description *"
+                          counter="150"
+                          :maxlength="150"
+                          required
+                          :error-messages="descriptionErrors"
+                          @input="$v.description.$touch()"
+                          @blur="$v.description.$touch()"></v-textarea>
             </v-flex>
             <v-flex xs12>
-              <v-text-field v-model="contactEmail" label="Contact Information *" :hint="contactHint" required :error-messages="contactEmailErrors" @input="$v.contactEmail.$touch()" @blur="$v.contactEmail.$touch()"></v-text-field>
+              <v-text-field v-model="contactEmail"
+                            label="Contact Information *"
+                            :hint="contactHint"
+                            required
+                            :error-messages="contactEmailErrors"
+                            @input="$v.contactEmail.$touch()"
+                            @blur="$v.contactEmail.$touch()"></v-text-field>
             </v-flex>
             <date-picker></date-picker>
             <time-picker></time-picker>
-            <v-flex xs12 mt-4>
-              <v-tabs centered v-model="active" color="cyan" dark fixed height="30">
+            <v-flex xs12
+                    mt-4>
+              <v-tabs centered
+                      v-model="active"
+                      color="cyan"
+                      dark
+                      fixed
+                      height="30">
                 <v-tabs-slider color="yellow"></v-tabs-slider>
                 <v-tab href="#tab-1">
                   Image Upload
@@ -33,14 +62,27 @@
                 <v-tab-item id="tab-1">
                   <v-card flat>
                     <v-card-text>
-                      <image-uploader ref="fileUpload" :debug="1" :maxWidth="400" :maxHeight="400" :quality="0.9" :autoRotate=true outputFormat="string" :preview=true @input="updateImageFile" @onUpload="checkFileType"></image-uploader>
+                      <image-uploader ref="fileUpload"
+                                      :debug="1"
+                                      :maxWidth="400"
+                                      :maxHeight="400"
+                                      :quality="0.9"
+                                      :autoRotate=true
+                                      outputFormat="string"
+                                      :preview=true
+                                      @input="updateImageFile"
+                                      @onUpload="checkFileType"></image-uploader>
                     </v-card-text>
                   </v-card>
                 </v-tab-item>
                 <v-tab-item id="tab-2">
                   <v-card flat>
                     <v-card-text>
-                      <v-text-field label="URL" v-model="imageURL" :error-messages="imageURLErrors" @input="$v.imageURL.$touch()" @blur="$v.imageURL.$touch()"></v-text-field>
+                      <v-text-field label="URL"
+                                    v-model="imageURL"
+                                    :error-messages="imageURLErrors"
+                                    @input="$v.imageURL.$touch()"
+                                    @blur="$v.imageURL.$touch()"></v-text-field>
                     </v-card-text>
                   </v-card>
                 </v-tab-item>
@@ -54,8 +96,11 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn @click="uploadImageAndDoc" :disabled="!valid">Submit</v-btn>
-      <v-btn color="cyan" dark @click.native="toggleSubmission">Close</v-btn>
+      <v-btn @click="uploadImageAndDoc"
+             :disabled="!valid">Submit</v-btn>
+      <v-btn color="cyan"
+             dark
+             @click.native="toggleSubmission">Close</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -85,14 +130,13 @@ export default {
     'db',
     'firebase',
     'user',
-    'lat',
-    'lng',
     'activeParent',
     'indexSubmissionForm',
     'typeHint',
     'descriptionHint',
     'contactHint',
-    'collectionName'
+    'collectionName',
+    'selectedLatLng'
   ],
   data () {
     return {
@@ -183,7 +227,10 @@ export default {
         type: this.type,
         description: this.description,
         contactEmail: this.contactEmail,
-        location: new this.firebase.firestore.GeoPoint(this.lat, this.lng),
+        coordinates: {
+          lat: this.selectedLatLng.lat,
+          lng: this.selectedLatLng.lng
+        },
         date: this.date,
         time: this.time,
         // timestamp: this.date + ' ' + this.time,

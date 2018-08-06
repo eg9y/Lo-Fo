@@ -90,7 +90,6 @@ export default {
           return
         }
         this.$store.dispatch('updateCollectionQuery', val)
-        console.log('d22')
       }
     },
     all_lost_items (collection) {

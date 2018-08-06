@@ -13,10 +13,18 @@ import { sync } from 'vuex-router-sync'
 // Setup vuetify
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
-// Setup google maps
-import * as VueGoogleMaps from 'vue2-google-maps'
+
 // Import global component Panel ('window' component)
-import Panel from '@/components/globals/Panel'
+import Panel from '@/components/Globals/Panel'
+
+import 'leaflet/dist/leaflet.css'
+delete L.Icon.Default.prototype._getIconUrl
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
 
 Vue.component('panel', Panel)
 
@@ -33,15 +41,6 @@ Vue.use(Vuetify, {
     primary: '#1C77C3',
     accent: '#39A9DB'
   }
-})
-
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: process.env.GOOGLE_MAPS_API,
-    // This is required if you use the Autocomplete plugin
-    libraries: 'places'
-  },
-  autobindAllEvents: false
 })
 
 Vue.use(VueProgressiveImage)

@@ -21,8 +21,7 @@
             :db="db"
             :firebase="firebase"
             :user="user"
-            :lat="lat"
-            :lng="lng"
+            :selectedLatLng="selectedLatLng"
             :activeParent="activeParent"
             :indexSubmissionForm="indexSubmissionForm"
             typeHint="What did you find?"
@@ -37,8 +36,7 @@
             :db="db"
             :firebase="firebase"
             :user="user"
-            :lat="lat"
-            :lng="lng"
+            :selectedLatLng="selectedLatLng"
             :activeParent="activeParent"
             :indexSubmissionForm="indexSubmissionForm"
             typeHint="What did you lose?"
@@ -65,7 +63,8 @@ export default {
   components: {
     'submission-form': Form
   },
-  props: ['lat', 'lng', 'submissionDialog'],
+
+  props: ['selectedLatLng', 'submissionDialog'],
   data () {
     return {
       activeParent: null,
