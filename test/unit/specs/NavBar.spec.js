@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import NavBar from '@/components/layout/NavBar'
+import NavBar from '@/components/Navigation/NavBar'
 
 describe('NavBar.vue', () => {
   it('should render correct contents', () => {

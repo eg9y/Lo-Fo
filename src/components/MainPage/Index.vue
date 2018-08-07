@@ -2,46 +2,48 @@
 
 <template>
   <div style="width: 100%; height: 100%">
-
     <!-- Alert that pops up when users attempt to create a marker without signing in -->
     <v-alert icon="new_releases"
-             style="margin=0 0 0 0;"
-             v-model="alert"
-             dismissible
-             type="error"
-             transition="slide-y-transition">
+      style="margin=0 0 0 0;"
+      v-model="alert"
+      dismissible
+      type="error"
+      transition="slide-y-transition">
       You must log in to pin!
     </v-alert>
 
     <!-- Pop up dialog that includes the submission form -->
     <submission-form :selectedLatLng="selectedLatLng"
-                     :submissionDialog="submissionDialog"
-                     :user="user"></submission-form>
+      :submissionDialog="submissionDialog"
+      :user="user"></submission-form>
 
     <!-- The UCSC map -->
     <l-map id="mapDialogFirst"
-           style="height: 100%"
-           :zoom="zoom"
-           :center="center"
-           :bounds="bounds"
-           :max-bounds="maxBounds"
-           @click="addLocation"
-           ref="map">
+      style="height: 100%"
+      :zoom="zoom"
+      :center="center"
+      :bounds="bounds"
+      :max-bounds="maxBounds"
+      @click="addLocation"
+      ref="map">
 
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
-                    :attribution="attribution"></l-tile-layer>
+        :attribution="attribution"></l-tile-layer>
 
       <!-- found items markers -->
       <found-items-markers v-if="foundToggle"
-                           :selectedMarker="selectedMarker"></found-items-markers>
+        :selectedFoundMarker="selectedFoundMarker"
+        @deleteMarker="deleteMarker"></found-items-markers>
 
       <!-- lost items markers -->
-      <lost-items-markers v-if="lostToggle"></lost-items-markers>
+      <lost-items-markers v-if="lostToggle"
+        :selectedLostMarker="selectedLostMarker"
+        @deleteMarker="deleteMarker"></lost-items-markers>
 
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
-                :lat-lng="selectedLatLng"></l-marker>
+        :lat-lng="selectedLatLng"></l-marker>
     </l-map>
   </div>
 </template>
@@ -49,7 +51,7 @@
 <script>
 import SubmissionForm from './SubmissionForm/Index'
 import FoundItemsMarkers from './Markers/FoundItemsMarkers/Index'
-import LostItemsMarkers from './Markers/LostItemsMarkers'
+import LostItemsMarkers from './Markers/LostItemsMarkers/Index'
 import { EventBus } from '../../main'
 import { mapState } from 'vuex'
 
@@ -82,7 +84,8 @@ export default {
       lost_items: [],
       found_items: [],
       triggerPopFound: null,
-      selectedMarker: null,
+      selectedFoundMarker: null,
+      selectedLostMarker: null,
       alert: false
     }
   },
@@ -159,7 +162,11 @@ export default {
       console.log('findMarker is running, looking for: ' + itemStr)
       const itemID = itemStr.substr(2)
       if (itemStr[0] === 'f') {
-        this.selectedMarker = itemID
+        this.selectedFoundMarker = itemID
+        this.selectedLostMarker = null
+      } else {
+        this.selectedLostMarker = itemID
+        this.selectedFoundMarker = null
       }
     }
   },
@@ -173,6 +180,14 @@ export default {
       if (this.$route.params.id) {
         // this.findMarker(this.$route.params.id)
       }
+    },
+    '$route.params.id': {
+      immediate: true,
+      handler (val) {
+        if (val) {
+          this.findMarker(val)
+        }
+      }
     }
   },
   created () {
@@ -185,18 +200,10 @@ export default {
     })
     EventBus.$on('newCenter', (newCenter) => {
       this.center = {
-        lat: newCenter[0].location._lat,
-        lng: newCenter[0].location._long
+        lat: newCenter.coordinates.lat,
+        lng: newCenter.coordinates.lng
       }
-      this.getMarkerDetails(newCenter[0], newCenter[1], newCenter[2])
     })
-    EventBus.$on('deleteMarker', (markerInfo) => {
-      this.deleteMarker(markerInfo)
-    })
-
-    if (this.$route.params.id) {
-      this.findMarker(this.$route.params.id)
-    }
   },
   filters: {
     /*

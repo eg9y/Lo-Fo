@@ -44,7 +44,7 @@
       <!-- This part of the drawer diplays the user's submission history, and center the map on the clicked entry -->
       <v-subheader inset>History</v-subheader>
 
-      <v-list-tile v-for="lost_item in lost_items" :key="lost_item.id" @click="centerLost(lost_item,'Lost: ','lost-items' )">
+      <v-list-tile v-for="lost_item in lost_items" :key="lost_item.id" @click="center(lost_item, 'lost')">
         <v-list-tile-action>
           <v-icon>sentiment_very_dissatisfied</v-icon>
         </v-list-tile-action>
@@ -56,7 +56,7 @@
         </v-list-tile-content>
       </v-list-tile>
 
-      <v-list-tile v-for="found_item in found_items" :key="found_item.id" @click="centerFound(found_item,'Find: ','found-items' )">
+      <v-list-tile v-for="found_item in found_items" :key="found_item.id" @click="center(found_item, 'found')">
         <v-list-tile-action>
           <v-icon>sentiment_very_satisfied</v-icon>
         </v-list-tile-action>
@@ -93,27 +93,18 @@ export default {
   },
   methods: {
     /*
-      Passes the information for a "lost" item to the GMap component
+      Passes the information for an item to the GMap component
       Information is used to center the view on the marker and open the marker's info window
     */
-    centerLost (lostItem, collectionTiltle, collectionName) {
-      if (this.$router[this.$router.length - 1] !== '/') {
-        this.$router.push(`/l-${lostItem.id}`)
+    center (lostItem, collection) {
+      let symbol
+      if (collection === 'lost') {
+        symbol = 'l'
+      } else {
+        symbol = 'f'
       }
-      EventBus.$emit('newCenter', [lostItem, collectionTiltle, collectionName])
+      this.$router.push(`/${symbol}-${lostItem.id}`)
     },
-
-    /*
-      Passes the information for a "found" item to the GMap component
-      Information is used to center the view on the marker and open the marker's info window
-    */
-    centerFound (foundItem, collectionTiltle, collectionName) {
-      if (this.$router[this.$router.length - 1] !== '/') {
-        this.$router.push(`/f-${foundItem.id}`)
-      }
-      EventBus.$emit('newCenter', [foundItem, collectionTiltle, collectionName])
-    },
-
     /*
       Passes the drawer status (open/closed) to the map component
     */
@@ -140,7 +131,6 @@ export default {
       this.drawer = this.mainDrawer
     },
     drawer () {
-      console.log(this.drawer)
       if (!this.drawer) {
         this.toggleDrawer()
       }
