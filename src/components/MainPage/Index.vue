@@ -96,8 +96,8 @@ export default {
       'stillLoading',
       'db',
       'firebase',
-      'all_lost_items',
-      'all_found_items',
+      'allLostItems',
+      'allFoundItems',
       'lostToggle',
       'foundToggle'
     ]),
@@ -116,8 +116,8 @@ export default {
       Parameters: e -- event object from clicking the map
     */
     addLocation (e) {
-      if (!this.user) {
-        this.alert = 'true'
+      if (!this.isUserLoggedIn) {
+        this.alert = true
         return
       }
       this.selectedLatLng = e.latlng
@@ -154,7 +154,7 @@ export default {
       })
     },
     /*
-      Given itemStr, searches for correct item in all_lost_items or all_found_items
+      Given itemStr, searches for correct item in allLostItems or allFoundItems
       Parameters: itemStr -- string in the form of <x>-<item id>, where item id is the unique id from the database,
       and x is 'l' for items in the lost collection and 'f' for items in the found collection
     */
@@ -171,12 +171,12 @@ export default {
     }
   },
   watch: {
-    all_lost_items () {
+    allLostItems () {
       if (this.$route.params.id) {
         // this.findMarker(this.$route.params.id)
       }
     },
-    all_found_items () {
+    allFoundItems () {
       if (this.$route.params.id) {
         // this.findMarker(this.$route.params.id)
       }

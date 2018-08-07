@@ -15,6 +15,7 @@
           <slot name="body"></slot>
         </v-flex>
       </v-layout>
+      <slot name="interaction"></slot>
     </l-popup>
     </l-marker>
 </template>

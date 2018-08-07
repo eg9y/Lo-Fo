@@ -31,10 +31,10 @@ export default {
   },
   computed: {
     ...mapState([
-      'all_lost_items',
-      'all_found_items',
-      'queried_found_items',
-      'queried_lost_items'
+      'allLostItems',
+      'allFoundItems',
+      'queriedFoundItems',
+      'queriedLostItems'
     ]),
     breakpoint () { return this.$vuetify.breakpoint }
   },
@@ -74,7 +74,7 @@ export default {
       if (!this.$route.query.search) {
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       } else {
-        this.updateCluster([...this.queried_lost_items, ...this.queried_found_items])
+        this.updateCluster([...this.queriedLostItems, ...this.queriedFoundItems])
       }
     }
   },
@@ -92,7 +92,7 @@ export default {
         this.$store.dispatch('updateCollectionQuery', val)
       }
     },
-    all_lost_items (collection) {
+    allLostItems (collection) {
       if (collection && collection.length) {
         if (!this.protectedAllFoundItems) {
           this.protectedAllFoundItems = []
@@ -102,7 +102,7 @@ export default {
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       }
     },
-    all_found_items (collection) {
+    allFoundItems (collection) {
       if (collection && collection.length) {
         if (!this.protectedAllLostItems) {
           this.protectedAllLostItems = []
@@ -111,13 +111,13 @@ export default {
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       }
     },
-    queried_found_items (collection) {
-      this.updateCluster([...this.queried_lost_items, ...this.queried_found_items])
+    queriedFoundItems (collection) {
+      this.updateCluster([...this.queriedLostItems, ...this.queriedFoundItems])
     }
   },
   created () {
-    this.protectedAllLostItems = this.all_lost_items
-    this.protectedAllFoundItems = this.all_found_items
+    this.protectedAllLostItems = this.allLostItems
+    this.protectedAllFoundItems = this.allFoundItems
     let lostItemsAvailable = this.protectedAllLostItems && this.protectedAllLostItems.length
     let foundItemsAvailable = this.protectedAllFoundItems && this.protectedAllFoundItems.length
     if (lostItemsAvailable && foundItemsAvailable) {

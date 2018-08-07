@@ -1,34 +1,30 @@
 <template>
   <div>
-    <individual-marker
-      v-for="foundItem in all_found_items"
+    <individual-marker v-for="foundItem in allFoundItems"
       :key="foundItem.id"
       :foundItem="foundItem"
-      :selectedFoundMarker="selectedFoundMarker"
-    >
+      :selectedFoundMarker="selectedFoundMarker">
       <template slot="header">
         <h1 style="text-align: center;">Found: {{foundItem.type}}</h1>
-        <progressive-img
-          v-if="foundItem.picture"
+        <progressive-img v-if="foundItem.picture"
           :src="foundItem.picture"
-          :alt="foundItem.type"
-        />
+          :alt="foundItem.type" />
       </template>
       <template slot="body">
         <h3>{{foundItem.description}}</h3>
         <h3>{{foundItem.timestamp}}</h3>
         <h3>{{foundItem.contactEmail}}</h3>
       </template>
-      <div class="text-xs-center">
-        <v-btn
-          v-if="isUserLoggedIn && user.uid == foundItem.userID"
-          @click="emitDelete(foundItem)"
-          color="error"
-        >
-          Resolve
+      <template slot="interaction">
+        <div class="text-xs-center">
+          <v-btn v-if="isUserLoggedIn && user.uid == foundItem.userID"
+            @click="emitDelete(foundItem)"
+            color="error">
+            Resolve
           </v-btn>
-      </div>
-      </individual-marker>
+        </div>
+      </template>
+    </individual-marker>
   </div>
 </template>
 
@@ -43,7 +39,7 @@ export default {
   props: ['selectedFoundMarker'],
   computed: {
     ...mapState([
-      'all_found_items',
+      'allFoundItems',
       'isUserLoggedIn',
       'user'
     ])

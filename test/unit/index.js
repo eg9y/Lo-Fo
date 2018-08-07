@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import 'babel-polyfill'
+import 'leaflet/dist/leaflet.js'
 
 Vue.config.productionTip = false
 
