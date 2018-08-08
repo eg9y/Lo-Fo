@@ -1,7 +1,7 @@
 # ~~Lost~~ and Found
 > Pin your lost and found items in the UCSC campus map!
 
-[![Build Status](https://travis-ci.org/VVNoodle/LoFo.svg?branch=BACKUP-MASTER)](https://travis-ci.org/VVNoodle/LoFo) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Coverage Status](https://coveralls.io/repos/github/VVNoodle/LoFo/badge.svg)](https://coveralls.io/github/VVNoodle/LoFo)
+[![Build Status](https://travis-ci.org/VVNoodle/Lo-Fo.svg?branch=BACKUP-MASTER)](https://travis-ci.org/VVNoodle/Lo-Fo) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Coverage Status](https://coveralls.io/repos/github/VVNoodle/LoFo/badge.svg)](https://coveralls.io/github/VVNoodle/LoFo)
 
 The idea began with the abundance of lost/found posts in the official UCSC Facebook page. In order to organize these posts and lessen the cluttering, we wanted to create something that can compile all these items onto a map. This will not only provide what Facebook already supported, but also generate a visual interface to locate items lost and items found.
 
@@ -77,7 +77,7 @@ npm run unit
 # Built With
 * [Vue.js](https://vuejs.org) - Progressive JavaScript Framework
 * [Firestore](https://firebase.google.com/docs/firestore/) - Realtime Database
-* [Google Maps API](https://developers.google.com/maps/documentation/javascript/tutorial) - Maps API
+* [LeafletJS](https://leafletjs.com) - Maps API
 
 # Contributing
 Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us (Doc will be written soon).
