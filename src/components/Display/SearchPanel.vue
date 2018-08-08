@@ -1,6 +1,5 @@
 <template>
-  <v-text-field
-    prepend-icon="search"
+  <v-text-field prepend-icon="search"
     hide-details
     single-line
     label="Search by type"

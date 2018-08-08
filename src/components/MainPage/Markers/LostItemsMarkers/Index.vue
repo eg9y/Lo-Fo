@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import IndividualMarker from './IndividualMarker'
 
 export default {
@@ -38,7 +38,7 @@ export default {
   },
   props: ['selectedLostMarker'],
   computed: {
-    ...mapState([
+    ...mapGetters([
       'allLostItems',
       'isUserLoggedIn',
       'user'

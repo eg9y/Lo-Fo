@@ -25,18 +25,10 @@ export const setQueriedFoundItems = function (state, items) {
 }
 
 // below four functions are for toggling lost/found pins
-export const setLostToggleTrue = function (state) {
-  state.lostToggle = true
+export const setLostToggle = function (state, status) {
+  state.lostToggle = status
 }
 
-export const setLostToggleFalse = function (state) {
-  state.lostToggle = false
-}
-
-export const setFoundToggleTrue = function (state) {
-  state.foundToggle = true
-}
-
-export const setFoundToggleFalse = function (state) {
-  state.foundToggle = false
+export const setFoundToggle = function (state, status) {
+  state.foundToggle = status
 }

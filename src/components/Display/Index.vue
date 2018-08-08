@@ -13,7 +13,7 @@
 <script>
 import List from './List'
 import SearchPanel from './SearchPanel'
-import { mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 // Creates a reference to firebase storag
 
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapGetters([
       'allLostItems',
       'allFoundItems',
       'queriedFoundItems',
@@ -39,6 +39,9 @@ export default {
     breakpoint () { return this.$vuetify.breakpoint }
   },
   methods: {
+    ...mapActions([
+      'updateCollectionQuery'
+    ]),
     updateCluster (collection) {
       let group = []
       let limit = 0
@@ -89,7 +92,7 @@ export default {
           this.updateAllClusters()
           return
         }
-        this.$store.dispatch('updateCollectionQuery', val)
+        this.updateCollectionQuery(val)
       }
     },
     allLostItems (collection) {
@@ -98,7 +101,6 @@ export default {
           this.protectedAllFoundItems = []
         }
         this.protectedAllLostItems = collection
-        console.log('ddd', collection)
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       }
     },

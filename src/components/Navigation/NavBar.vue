@@ -2,7 +2,6 @@
 
 <template>
   <div>
-
     <v-toolbar dark
                color="primary"
                v-if="!stillLoading">
@@ -90,20 +89,19 @@
 
     <!-- Side nav drawer -->
     <side-nav :mainDrawer="drawer"></side-nav>
-
   </div>
 </template>
 
 <script>
 import SideNav from './SideNav/Index'
 import DisplayButton from './DisplayButton'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { EventBus } from '../../main'
 
 export default {
   components: {
-    'side-nav': SideNav,
-    'display-button': DisplayButton
+    SideNav,
+    DisplayButton
   },
   data () {
     return {
@@ -112,13 +110,18 @@ export default {
   },
   computed: {
     ...mapState([
+      'firebase'
+    ]),
+    ...mapGetters([
       'isUserLoggedIn',
       'user',
-      'stillLoading',
-      'firebase'
+      'stillLoading'
     ])
   },
   methods: {
+    ...mapActions([
+      'signOut'
+    ]),
     /*
       Redirects to Google authentication
     */
@@ -136,7 +139,7 @@ export default {
     signOut () {
       this.firebase.auth().signOut().then(() => {
         // Sign-out successful.
-        this.$store.dispatch('signOut')
+        this.signOut()
       }).catch(function (error) {
         console.log(error)
       })

@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import {mapMutations} from 'vuex'
+
 export default {
   data () {
     return {
@@ -39,14 +41,18 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setLostToggle',
+      'setFoundToggle'
+    ]),
     /*
       Displays the lost markers if the lost_checkbox is checked
     */
     displayLost () {
       if (this.lost_checkbox) {
-        this.$store.commit('setLostToggleTrue')
+        this.setLostToggle(true)
       } else {
-        this.$store.commit('setLostToggleFalse')
+        this.setLostToggle(false)
       }
     },
     /*
@@ -54,9 +60,9 @@ export default {
     */
     displayFound () {
       if (this.found_checkbox) {
-        this.$store.commit('setFoundToggleTrue')
+        this.setFoundToggle(true)
       } else {
-        this.$store.commit('setFoundToggleFalse')
+        this.setFoundToggle(false)
       }
     }
   }

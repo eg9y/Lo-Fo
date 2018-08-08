@@ -73,7 +73,7 @@
 
 <script>
 import { EventBus } from '../../../main'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   props: ['mainDrawer'],
@@ -84,14 +84,19 @@ export default {
   },
   computed: {
     ...mapState([
+      'firebase'
+    ]),
+    ...mapGetters([
       'isUserLoggedIn',
       'user',
       'lost_items',
-      'found_items',
-      'firebase'
+      'found_items'
     ])
   },
   methods: {
+    ...mapActions([
+      'signOut'
+    ]),
     /*
       Passes the information for an item to the GMap component
       Information is used to center the view on the marker and open the marker's info window
@@ -119,7 +124,7 @@ export default {
     signOut () {
       this.firebase.auth().signOut().then(() => {
         // Sign-out successful.
-        this.$store.dispatch('signOut')
+        this.signOut()
         this.drawer = !this.drawer
       }).catch(function (error) {
         console.log(error)

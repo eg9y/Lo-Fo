@@ -11,7 +11,7 @@
 
 <script>
 import Navbar from '@/components/Navigation/Navbar'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -23,35 +23,45 @@ export default {
   computed: {
     ...mapState([
       'firebase',
-      'db',
+      'db'
+    ]),
+    ...mapGetters([
       'user'
     ])
   },
   methods: {
+    ...mapActions([
+      'updateUserCollection',
+      'updateCollection',
+      'stillLoading',
+      'setUser',
+      'setAllLostItems',
+      'setAllFoundItems'
+    ]),
     /*
       Gets all documents by user from lost-items and found-items collection
       and stores it in lost_items and found_items array
     */
     fetchAllUserDocuments () {
-      this.$store.dispatch('updateUserCollection', 'lost-items')
-      this.$store.dispatch('updateUserCollection', 'found-items')
+      this.updateUserCollection('lost-items')
+      this.updateUserCollection('found-items')
     },
     /*
       Gets all documents from lost-items and found-items collection
       and stores it in lost_items and found_items array
     */
     fetchAllDocuments () {
-      this.$store.dispatch('updateCollection', 'lost-items')
-      this.$store.dispatch('updateCollection', 'found-items')
+      this.updateCollection('lost-items')
+      this.updateCollection('found-items')
     }
   },
   created () {
     this.firebase.auth().onAuthStateChanged(
       (user) => {
-        this.$store.dispatch('stillLoading', false)
+        this.stillLoading(false)
         if (user) {
           // User is signed in.
-          this.$store.dispatch('setUser', user)
+          this.setUser(user)
           this.fetchAllUserDocuments()
         }
         this.fetchAllDocuments()
@@ -64,9 +74,9 @@ export default {
         querySnapshot.forEach(function (doc) {
           lostItems.push(doc.data())
         })
-        this.$store.dispatch('setAllLostItems', lostItems)
+        this.setAllLostItems(lostItems)
         if (this.user) {
-          this.$store.dispatch('updateUserCollection', 'lost-items')
+          this.updateUserCollection('lost-items')
         }
       })
 
@@ -76,9 +86,9 @@ export default {
         querySnapshot.forEach(function (doc) {
           foundItems.push(doc.data())
         })
-        this.$store.dispatch('setAllFoundItems', foundItems)
+        this.setAllFoundItems(foundItems)
         if (this.user) {
-          this.$store.dispatch('updateUserCollection', 'found-items')
+          this.updateUserCollection('found-items')
         }
       })
   }

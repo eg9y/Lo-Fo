@@ -56,7 +56,7 @@
 
 <script>
 import Form from './Form'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { EventBus } from '../../../main'
 
 export default {
@@ -75,9 +75,11 @@ export default {
   },
   computed: {
     ...mapState([
-      'user',
       'db',
       'firebase'
+    ]),
+    ...mapGetters([
+      'user'
     ]),
     goMobile () {
       return this.$vuetify.breakpoint.width < '710'

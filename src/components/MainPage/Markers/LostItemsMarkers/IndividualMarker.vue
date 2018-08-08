@@ -1,9 +1,7 @@
 <template>
-  <l-marker
-    :lat-lng="lostItem.coordinates"
+  <l-marker :lat-lng="lostItem.coordinates"
     :icon="icon"
-    :ref="`l${lostItem.id}`"
-  >
+    :ref="`l${lostItem.id}`">
     <l-popup>
       <v-layout>
         <v-flex class="text-xs-center">
@@ -17,7 +15,7 @@
       </v-layout>
       <slot name="interaction"></slot>
     </l-popup>
-    </l-marker>
+  </l-marker>
 </template>
 
 <script>

@@ -2,9 +2,23 @@ import {pushDocuments} from '../helperFunction'
 
 const state = {
   user: null, // user object
-  isUserLoggedIn: false,
   lost_items: null,
   found_items: null
+}
+
+const getters = {
+  user (state) {
+    return state.user
+  },
+  isUserLoggedIn (state) {
+    return !!state.user
+  },
+  lost_items (state) {
+    return state.lost_items
+  },
+  found_items (state) {
+    return state.found_items
+  }
 }
 
 const mutations = {
@@ -34,11 +48,11 @@ const actions = {
   /*
       Fetches new submissions from firebase storage and updates the local copy of the user's lost/found entries
     */
-  updateUserCollection ({ commit }, collectionName) {
+  updateUserCollection ({ state, commit, rootState }, collectionName) {
     let documents = []
-    this.state.db
+    rootState.db
       .collection(collectionName)
-      .where('userID', '==', this.state.user.uid)
+      .where('userID', '==', state.user.uid)
       .get()
       .then(items => {
         pushDocuments(items, documents)
@@ -57,5 +71,6 @@ const actions = {
 export default {
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

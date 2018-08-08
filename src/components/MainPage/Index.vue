@@ -53,7 +53,7 @@ import SubmissionForm from './SubmissionForm/Index'
 import FoundItemsMarkers from './Markers/FoundItemsMarkers/Index'
 import LostItemsMarkers from './Markers/LostItemsMarkers/Index'
 import { EventBus } from '../../main'
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
 
@@ -91,11 +91,13 @@ export default {
   },
   computed: {
     ...mapState([
+      'db',
+      'firebase'
+    ]),
+    ...mapGetters([
       'isUserLoggedIn',
       'user',
       'stillLoading',
-      'db',
-      'firebase',
       'allLostItems',
       'allFoundItems',
       'lostToggle',
@@ -111,6 +113,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'updateUserCollection',
+      'updateCollection'
+    ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
       Parameters: e -- event object from clicking the map
@@ -146,8 +152,8 @@ export default {
 
       // deletes the entry from the db and then updates the local copies
       this.db.collection(collectionName).doc(id).delete().then(() => {
-        this.$store.dispatch('updateUserCollection', collectionName)
-        this.$store.dispatch('updateCollection', collectionName)
+        this.updateUserCollection(collectionName)
+        this.updateCollection(collectionName)
         console.log('Document successfully deleted!')
       }).catch(function (error) {
         console.error('Error removing document: ', error)
