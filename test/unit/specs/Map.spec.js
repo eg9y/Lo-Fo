@@ -1,5 +1,8 @@
 import Vue from 'vue'
+// import { mount } from '@vue/test-utils'
 import Map from '@/components/MainPage/Index'
+
+// const wrapper = mount(Map)
 
 describe('Map Component', () => {
   it('checks that the submission form is closed, when component is first opened', () => {

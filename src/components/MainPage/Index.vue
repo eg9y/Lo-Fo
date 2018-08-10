@@ -22,7 +22,6 @@
       style="height: 100%"
       :zoom="zoom"
       :center="center"
-      :bounds="bounds"
       :max-bounds="maxBounds"
       @click="addLocation"
       ref="map">
@@ -31,16 +30,18 @@
       <l-tile-layer :url="url"
         :attribution="attribution"></l-tile-layer>
 
-      <!-- found items markers -->
-      <found-items-markers v-if="foundToggle"
-        :selectedFoundMarker="selectedFoundMarker"
-        @deleteMarker="deleteMarker"></found-items-markers>
+      <v-marker-cluster :options="clusterOptions">
+        <!-- found items markers -->
+        <found-items-markers v-if="foundToggle"
+          :selectedFoundMarker="selectedFoundMarker"
+          @deleteMarker="deleteMarker"></found-items-markers>
 
-      <!-- lost items markers -->
-      <lost-items-markers v-if="lostToggle"
-        :selectedLostMarker="selectedLostMarker"
-        @deleteMarker="deleteMarker"></lost-items-markers>
+        <!-- lost items markers -->
+        <lost-items-markers v-if="lostToggle"
+          :selectedLostMarker="selectedLostMarker"
+          @deleteMarker="deleteMarker"></lost-items-markers>
 
+      </v-marker-cluster>
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
         :lat-lng="selectedLatLng"></l-marker>
@@ -56,6 +57,10 @@ import { EventBus } from '../../main'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
+import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+
+import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
+import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
 export default {
   components: {
@@ -65,18 +70,19 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LPopup,
+    'v-marker-cluster': Vue2LeafletMarkerCluster
   },
   name: 'Map',
   data () {
     return {
-      zoom: 15,
-      center: L.latLng(36.994635, -122.058842),
+      zoom: 16,
+      center: L.latLng(36.991326, -122.058761),
       marker: L.latLng(36.994635, -122.058842),
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      bounds: L.latLngBounds([[36.987615, -122.068846], [37.001976, -122.04808]]),
-      maxBounds: L.latLngBounds([[36.987615, -122.068846], [37.001976, -122.04808]]),
+      bounds: L.latLngBounds([[36.972855, -122.085947], [37.009252, -122.036793]]),
+      maxBounds: L.latLngBounds([[36.972855, -122.085947], [37.009252, -122.036793]]),
       // lat and lng are used for location
       selectedLatLng: null,
       submissionDialog: false,
@@ -86,7 +92,8 @@ export default {
       triggerPopFound: null,
       selectedFoundMarker: null,
       selectedLostMarker: null,
-      alert: false
+      alert: false,
+      clusterOptions: {}
     }
   },
   computed: {
@@ -105,7 +112,7 @@ export default {
     ]),
     mapOptions () {
       return {
-        minZoom: 15,
+        minZoom: 17,
         maxZoom: 18,
         gestureHandling: this.$vuetify.breakpoint.width >= '710' ? 'cooperative' : 'greedy',
         draggableCursor: 'url(http://s3.amazonaws.com/besport.com_images/status-pin.png), auto'
@@ -211,6 +218,18 @@ export default {
       }
     })
   },
+  mounted () {
+    setTimeout(() => {
+      console.log('done')
+      this.$nextTick(() => {
+        this.clusterOptions = {
+          disableClusteringAtZoom: 11,
+          zoomToBoundsOnClick: true,
+          spiderfyOnMaxZoom: true
+        }
+      })
+    }, 5000)
+  },
   filters: {
     /*
       Define truncate filter to replace long words with ...
@@ -227,7 +246,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@import "leaflet/dist/leaflet.css";
+
 img {
   width: 100%;
   height: auto;

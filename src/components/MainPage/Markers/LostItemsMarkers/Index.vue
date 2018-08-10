@@ -35,6 +35,7 @@ import IndividualMarker from './IndividualMarker'
 export default {
   components: {
     IndividualMarker
+
   },
   props: ['selectedLostMarker'],
   computed: {

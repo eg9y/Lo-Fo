@@ -17,7 +17,6 @@ import 'vuetify/dist/vuetify.min.css'
 // Import global component Panel ('window' component)
 import Panel from '@/components/Globals/Panel'
 
-import 'leaflet/dist/leaflet.css'
 delete L.Icon.Default.prototype._getIconUrl
 
 L.Icon.Default.mergeOptions({
