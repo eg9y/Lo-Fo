@@ -25,6 +25,13 @@
       :max-bounds="maxBounds"
       @click="addLocation"
       ref="map">
+      <v-protobuf url="https://basemaps.arcgis.com/v1/arcgis/rest/services/World_Basemap/VectorTileServer/tile/{z}/{y}/{x}.pbf" :options="options"></v-protobuf>
+    </l-map>
+  </div>
+</template>
+
+<script>
+/*
 
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
@@ -45,11 +52,7 @@
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
         :lat-lng="selectedLatLng"></l-marker>
-    </l-map>
-  </div>
-</template>
-
-<script>
+*/
 import SubmissionForm from './SubmissionForm/Index'
 import FoundItemsMarkers from './Markers/FoundItemsMarkers/Index'
 import LostItemsMarkers from './Markers/LostItemsMarkers/Index'
@@ -58,7 +61,9 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+import Vue2LeafletVectorGridProtobuf from 'vue2-leaflet-vectorgrid'
 
+import 'leaflet/dist/leaflet.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
 
@@ -71,7 +76,8 @@ export default {
     LTileLayer,
     LMarker,
     LPopup,
-    'v-marker-cluster': Vue2LeafletMarkerCluster
+    'v-marker-cluster': Vue2LeafletMarkerCluster,
+    'v-protobuf': Vue2LeafletVectorGridProtobuf
   },
   name: 'Map',
   data () {
@@ -93,7 +99,10 @@ export default {
       selectedFoundMarker: null,
       selectedLostMarker: null,
       alert: false,
-      clusterOptions: {}
+      clusterOptions: {},
+      options: {
+        vectorTileLayerStyles: { }
+      }
     }
   },
   computed: {
@@ -223,9 +232,7 @@ export default {
       console.log('done')
       this.$nextTick(() => {
         this.clusterOptions = {
-          disableClusteringAtZoom: 11,
-          zoomToBoundsOnClick: true,
-          spiderfyOnMaxZoom: true
+          animateAddingMarkers: true
         }
       })
     }, 5000)
@@ -247,7 +254,6 @@ export default {
 </script>
 
 <style>
-@import "leaflet/dist/leaflet.css";
 
 img {
   width: 100%;

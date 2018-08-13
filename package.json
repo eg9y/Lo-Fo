@@ -23,6 +23,7 @@
     "vue-upload-component": "^2.8.9",
     "vue2-leaflet": "^1.0.2",
     "vue2-leaflet-markercluster": "^2.0.0",
+    "vue2-leaflet-vectorgrid": "^1.0.6",
     "vuelidate": "^0.7.4",
     "vuetify": "^1.1.1",
     "vuex": "^3.0.1",

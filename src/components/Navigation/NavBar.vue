@@ -5,6 +5,8 @@
     <v-toolbar dark
                color="primary"
                v-if="!stillLoading">
+
+      <!-- Mobile View -->
       <template v-if="$vuetify.breakpoint.width < 710">
         <v-menu :nudge-width="100">
           <v-toolbar-title slot="activator">
@@ -14,13 +16,13 @@
             <v-list-tile v-if="!this.isUserLoggedIn"
                          @click="auth">
               <v-list-tile-title>
-                <v-icon left>fas fa-sign-in-alt</v-icon> Sign In
+                Sign In
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-else
                          @click="signOut">
               <v-list-tile-title>
-                <v-icon left>fas fa-sign-out-alt</v-icon> Sign Out
+                Sign Out
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-if="this.isUserLoggedIn"
@@ -43,6 +45,8 @@
           <display-button></display-button>
         </v-toolbar-items>
       </template>
+
+      <!-- Desktop View -->
       <template v-if="$vuetify.breakpoint.width >= 710">
         <v-toolbar-side-icon v-if="this.isUserLoggedIn"
                              @click.stop="drawer = !drawer">
@@ -63,19 +67,17 @@
         <v-toolbar-items v-if="!this.isUserLoggedIn">
           <v-btn @click="auth"
                  flat>
-            <v-icon left>fas fa-sign-in-alt</v-icon>
             Sign In
           </v-btn>
         </v-toolbar-items>
         <v-toolbar-items v-else>
           <v-btn @click="signOut"
                  flat>
-            <v-icon left>fas fa-sign-out-alt</v-icon>
             Sign Out
           </v-btn>
           <v-btn to="/profile"
                  flat>
-            {{user.displayName}}
+            <v-icon left>face</v-icon> {{user.displayName}}
           </v-btn>
         </v-toolbar-items>
       </template>

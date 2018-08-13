@@ -6,7 +6,7 @@
           :close-on-content-click="false">
     <v-btn slot="activator"
            flat>
-      <v-icon left>fas fa-list-ul</v-icon>
+      <v-icon left>list</v-icon>
       Display
     </v-btn>
     <v-list>
