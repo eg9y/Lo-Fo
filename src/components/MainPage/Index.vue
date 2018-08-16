@@ -25,19 +25,11 @@
       :max-bounds="maxBounds"
       @click="addLocation"
       ref="map">
-      <v-protobuf url="https://basemaps.arcgis.com/v1/arcgis/rest/services/World_Basemap/VectorTileServer/tile/{z}/{y}/{x}.pbf" :options="options"></v-protobuf>
-    </l-map>
-  </div>
-</template>
-
-<script>
-/*
-
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
         :attribution="attribution"></l-tile-layer>
-
       <v-marker-cluster :options="clusterOptions">
+
         <!-- found items markers -->
         <found-items-markers v-if="foundToggle"
           :selectedFoundMarker="selectedFoundMarker"
@@ -45,14 +37,17 @@
 
         <!-- lost items markers -->
         <lost-items-markers v-if="lostToggle"
-          :selectedLostMarker="selectedLostMarker"
           @deleteMarker="deleteMarker"></lost-items-markers>
 
+        <!-- selected location -->
+        <l-marker v-if="selectedLatLng"
+          :lat-lng="selectedLatLng"></l-marker>
       </v-marker-cluster>
-      <!-- selected location -->
-      <l-marker v-if="selectedLatLng"
-        :lat-lng="selectedLatLng"></l-marker>
-*/
+    </l-map>
+  </div>
+</template>
+
+<script>
 import SubmissionForm from './SubmissionForm/Index'
 import FoundItemsMarkers from './Markers/FoundItemsMarkers/Index'
 import LostItemsMarkers from './Markers/LostItemsMarkers/Index'
@@ -61,7 +56,6 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
-import Vue2LeafletVectorGridProtobuf from 'vue2-leaflet-vectorgrid'
 
 import 'leaflet/dist/leaflet.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
@@ -76,14 +70,11 @@ export default {
     LTileLayer,
     LMarker,
     LPopup,
-    'v-marker-cluster': Vue2LeafletMarkerCluster,
-    'v-protobuf': Vue2LeafletVectorGridProtobuf
+    'v-marker-cluster': Vue2LeafletMarkerCluster
   },
   name: 'Map',
   data () {
     return {
-      zoom: 16,
-      center: L.latLng(36.991326, -122.058761),
       marker: L.latLng(36.994635, -122.058842),
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -97,12 +88,8 @@ export default {
       found_items: [],
       triggerPopFound: null,
       selectedFoundMarker: null,
-      selectedLostMarker: null,
       alert: false,
-      clusterOptions: {},
-      options: {
-        vectorTileLayerStyles: { }
-      }
+      clusterOptions: {}
     }
   },
   computed: {
@@ -117,7 +104,10 @@ export default {
       'allLostItems',
       'allFoundItems',
       'lostToggle',
-      'foundToggle'
+      'foundToggle',
+      'center',
+      'zoom',
+      'selectedLostMarker'
     ]),
     mapOptions () {
       return {
@@ -131,7 +121,9 @@ export default {
   methods: {
     ...mapActions([
       'updateUserCollection',
-      'updateCollection'
+      'updateCollection',
+      'toggleCluster',
+      'setSelectedLostMarker'
     ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
@@ -185,9 +177,9 @@ export default {
       const itemID = itemStr.substr(2)
       if (itemStr[0] === 'f') {
         this.selectedFoundMarker = itemID
-        this.selectedLostMarker = null
+        this.setSelectedLostMarker(null)
       } else {
-        this.selectedLostMarker = itemID
+        this.setSelectedLostMarker(itemID)
         this.selectedFoundMarker = null
       }
     }
@@ -210,6 +202,14 @@ export default {
           this.findMarker(val)
         }
       }
+    },
+    clusterOn (status) {
+      // if no cluster
+      if (!status) {
+        setTimeout(() => {
+          this.toggleCluster(true)
+        }, 2000)
+      }
     }
   },
   created () {
@@ -227,12 +227,16 @@ export default {
       }
     })
   },
+  /*
+    Set up clustering options
+  */
   mounted () {
     setTimeout(() => {
       console.log('done')
       this.$nextTick(() => {
         this.clusterOptions = {
-          animateAddingMarkers: true
+          animateAddingMarkers: false,
+          disableClusteringAtZoom: 11
         }
       })
     }, 5000)
@@ -254,7 +258,6 @@ export default {
 </script>
 
 <style>
-
 img {
   width: 100%;
   height: auto;

@@ -25,7 +25,10 @@ export default new Vuex.Store({
     // if lostToggle/foundToggle is true = display lost/found markers
     // if lostToggle/foundToggle is false = hide lost/found markers
     lostToggle: true,
-    foundToggle: true
+    foundToggle: true,
+    center: L.latLng(36.991326, -122.058761),
+    zoom: 16,
+    selectedLostMarker: null
   },
   getters,
   mutations,

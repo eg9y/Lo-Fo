@@ -20,9 +20,10 @@
 
 <script>
 import { LMarker, LPopup } from 'vue2-leaflet'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  props: ['lostItem', 'selectedLostMarker'],
+  props: ['lostItem'],
   components: {
     LMarker,
     LPopup
@@ -33,6 +34,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'selectedLostMarker'
+    ]),
     icon () {
       return L.icon({
         iconUrl: 'https://firebasestorage.googleapis.com/v0/b/lost-and-found-ddb76.appspot.com/o/lost_icon.png?alt=media&token=bc3b089f-1bfe-4cec-867b-aaa9ab75bd46',
@@ -42,10 +46,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setCenter',
+      'setZoom',
+      'toggleCluster',
+      'setSelectedLostMarker'
+    ]),
     popUp (selectedLostMarker) {
       const thisIsTheSelectedMarker = selectedLostMarker === this.lostItem.id
       if (this.marker && thisIsTheSelectedMarker) {
-        this.marker.mapObject.openPopup()
+        this.setZoom(20)
+        this.setCenter(L.latLng(this.lostItem.coordinates.lat, this.lostItem.coordinates.lng))
+        setTimeout(() => {
+          this.marker.mapObject.openPopup()
+        }, 0)
       }
     }
   },

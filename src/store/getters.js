@@ -1,15 +1,21 @@
-export const firebase = (state) => state.firebase
+export const firebase = ({firebase}) => firebase
 
-export const allLostItems = (state) => state.allLostItems
+export const allLostItems = ({allLostItems}) => allLostItems
 
-export const allFoundItems = (state) => state.allFoundItems
+export const allFoundItems = ({allFoundItems}) => allFoundItems
 
-export const stillLoading = (state) => state.stillLoading
+export const stillLoading = ({stillLoading}) => stillLoading
 
-export const queriedLostItems = (state) => state.queriedLostItems
+export const queriedLostItems = ({queriedLostItems}) => queriedLostItems
 
-export const queriedFoundItems = (state) => state.queriedFoundItems
+export const queriedFoundItems = ({queriedFoundItems}) => queriedFoundItems
 
-export const lostToggle = (state) => state.lostToggle
+export const lostToggle = ({lostToggle}) => lostToggle
 
-export const foundToggle = (state) => state.foundToggle
+export const foundToggle = ({foundToggle}) => foundToggle
+
+export const center = ({center}) => center
+
+export const zoom = ({zoom}) => zoom
+
+export const selectedLostMarker = ({selectedLostMarker}) => selectedLostMarker

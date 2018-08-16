@@ -16,6 +16,17 @@ export const pushToCollection = function ({ commit }, colAndDoc) {
   commit('pushToCollection', colAndDoc)
 }
 
+export const setZoom = function ({ commit }, newZoom) {
+  commit('setZoom', newZoom)
+}
+
+export const setCenter = function ({ commit }, newCenter) {
+  commit('setCenter', newCenter)
+}
+
+export const setSelectedLostMarker = function ({ commit }, marker) {
+  commit('setSelectedLostMarker', marker)
+}
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
   */

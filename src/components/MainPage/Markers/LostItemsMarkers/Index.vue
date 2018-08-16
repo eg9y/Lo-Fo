@@ -3,7 +3,7 @@
     <individual-marker v-for="lostItem in allLostItems"
       :key="lostItem.id"
       :lostItem="lostItem"
-      :selectedLostMarker="selectedLostMarker">
+      >
       <template slot="header">
         <h1 style="text-align: center;">Lost: {{lostItem.type}}</h1>
         <progressive-img v-if="lostItem.picture"
@@ -37,7 +37,6 @@ export default {
     IndividualMarker
 
   },
-  props: ['selectedLostMarker'],
   computed: {
     ...mapGetters([
       'allLostItems',

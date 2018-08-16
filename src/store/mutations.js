@@ -32,3 +32,19 @@ export const setLostToggle = function (state, status) {
 export const setFoundToggle = function (state, status) {
   state.foundToggle = status
 }
+
+export const setCenter = function (state, newCenter) {
+  state.center = newCenter
+}
+
+export const setZoom = function (state, newZoom) {
+  state.zoom = newZoom
+}
+
+export const toggleCluster = function (state, toggle) {
+  state.clusterOn = toggle
+}
+
+export const setSelectedLostMarker = function (state, marker) {
+  state.selectedLostMarker = marker
+}

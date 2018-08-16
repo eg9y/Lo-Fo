@@ -22,6 +22,7 @@
 
 <script>
 import { LMarker, LPopup } from 'vue2-leaflet'
+import { mapActions } from 'vuex'
 
 export default {
   props: ['foundItem', 'selectedFoundMarker'],
@@ -44,10 +45,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setZoom',
+      'setCenter'
+    ]),
     popUp (selectedFoundMarker) {
       const thisIsTheSelectedMarker = selectedFoundMarker === this.foundItem.id
       if (this.marker && thisIsTheSelectedMarker) {
-        this.marker.mapObject.openPopup()
+        this.setZoom(20)
+        this.setCenter(L.latLng(this.foundItem.coordinates.lat, this.foundItem.coordinates.lng))
+        setTimeout(() => {
+          this.marker.mapObject.openPopup()
+        }, 0)
       }
     }
   },
