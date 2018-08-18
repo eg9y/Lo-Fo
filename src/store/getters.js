@@ -25,3 +25,5 @@ export const selectedMarker = ({ selectedMarker }) => selectedMarker
 export const map = ({ map }) => map
 
 export const popupClicked = ({ popupClicked }) => popupClicked
+
+export const queriedItems = ({ queriedItems }) => queriedItems

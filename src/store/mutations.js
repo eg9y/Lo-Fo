@@ -22,12 +22,8 @@ export const setAllFoundItems = function (state, items) {
     }) || items
 }
 
-export const setQueriedLostItems = function (state, items) {
-  state.queriedLostItems = items
-}
-
-export const setQueriedFoundItems = function (state, items) {
-  state.queriedFoundItems = items
+export const setQueriedItems = function (state, items) {
+  state.queriedItems = items
 }
 
 // below four functions are for toggling lost/found pins

@@ -118,6 +118,15 @@ import { ImageUploader } from 'vue-image-upload-resize'
 import { email, required, helpers } from 'vuelidate/lib/validators'
 import formMixin from '../../../mixins/form'
 
+import algoliasearch from 'algoliasearch'
+
+// configure algolia
+const algolia = algoliasearch(
+  process.env.ALGOLIA_APP_ID,
+  process.env.ALGOLIA_API_KEY
+)
+const index = algolia.initIndex(process.env.ALGOLIA_INDEX_NAME)
+
 const IMAGEURLVALIDATION = helpers.regex('IMAGEURLVALIDATION', /(?:([^:/?#]+):)?(?:\/\/([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?/)
 
 export default {
@@ -239,6 +248,15 @@ export default {
         collection
       }).then((docRef) => {
         docRef.get().then((doc) => {
+          index.addObject({
+            ...doc.data(),
+            objectID: doc.id
+          }, function (err, content) {
+            if (err) {
+              return console.log(err)
+            }
+            console.log('objectID=' + content.objectID)
+          })
           this.$store.dispatch('updateUserCollection', collectionName)
           this.$store.dispatch('updateCollection', collectionName)
         })

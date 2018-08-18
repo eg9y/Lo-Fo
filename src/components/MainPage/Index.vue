@@ -22,6 +22,8 @@
       id="mapDialogFirst"
       style="height: 100%"
       :zoom="zoom"
+      :minZoom="15"
+      :maxZoom="18"
       :center="center"
       :max-bounds="maxBounds"
       @click="addLocation"
@@ -59,9 +61,19 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 
+// setup marker clustering
 import 'leaflet/dist/leaflet.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
+
+// Configure algolia for search functionality
+import algoliasearch from 'algoliasearch'
+// configure algolia
+const algolia = algoliasearch(
+  process.env.ALGOLIA_APP_ID,
+  process.env.ALGOLIA_API_KEY
+)
+const index = algolia.initIndex(process.env.ALGOLIA_INDEX_NAME)
 
 export default {
   components: {
@@ -171,6 +183,8 @@ export default {
         console.log('Document successfully deleted!')
         L.popup()
           .closePopup()
+        // deletes entry from algolia
+        index.deleteObject(markerInfo.id)
       }).catch(function (error) {
         console.error('Error removing document: ', error)
       })
@@ -227,6 +241,12 @@ export default {
           .setContent(container)
           .openOn(this.map)
       }
+    },
+    onLocationFound (e) {
+      const radius = e.accuracy / 4
+      L.marker(e.latlng).addTo(this.map)
+        .bindPopup('You are within ' + radius + ' meters from this point').openPopup()
+      L.circle(e.latlng, radius).addTo(this.map)
     }
   },
   watch: {
@@ -272,6 +292,8 @@ export default {
       }
       this.setMap(this.$refs.map.mapObject)
       this.setPopup()
+      this.map.locate({})
+      this.map.on('locationfound', this.onLocationFound)
     })
   },
   filters: {
@@ -301,7 +323,7 @@ img {
 }
 
 .button {
-  background-color: rgb(214, 78, 78);
+  background-color: rgb(126, 187, 109);
   border: none;
   color: white;
   padding: 15px 32px;

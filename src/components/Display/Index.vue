@@ -3,10 +3,13 @@
 <template>
   <div>
     <!-- Search bar to search submission by item type -->
-    <!-- <search-panel></search-panel> -->
+    <search-panel></search-panel>
 
     <!--Sets the design and displays Lost Items-->
     <list :collectionCluster="clusteredCollections" />
+    <h1 v-if="!clusteredCollections">
+      Loading...
+    </h1>
   </div>
 </template>
 
@@ -33,8 +36,7 @@ export default {
     ...mapGetters([
       'allLostItems',
       'allFoundItems',
-      'queriedFoundItems',
-      'queriedLostItems'
+      'queriedItems'
     ]),
     breakpoint () { return this.$vuetify.breakpoint }
   },
@@ -77,7 +79,7 @@ export default {
       if (!this.$route.query.search) {
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       } else {
-        this.updateCluster([...this.queriedLostItems, ...this.queriedFoundItems])
+        this.updateCluster([...this.queriedItems])
       }
     }
   },
@@ -113,8 +115,8 @@ export default {
         this.updateCluster([...this.protectedAllLostItems, ...this.protectedAllFoundItems])
       }
     },
-    queriedFoundItems (collection) {
-      this.updateCluster([...this.queriedLostItems, ...this.queriedFoundItems])
+    queriedItems (collection) {
+      this.updateCluster([...this.queriedItems])
     }
   },
   created () {
@@ -122,7 +124,7 @@ export default {
     this.protectedAllFoundItems = this.allFoundItems
     let lostItemsAvailable = this.protectedAllLostItems && this.protectedAllLostItems.length
     let foundItemsAvailable = this.protectedAllFoundItems && this.protectedAllFoundItems.length
-    if (lostItemsAvailable && foundItemsAvailable) {
+    if (lostItemsAvailable || foundItemsAvailable) {
       this.updateAllClusters()
     }
   }

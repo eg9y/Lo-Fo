@@ -17,7 +17,7 @@ export default {
   watch: {
     search (val) {
       const route = {
-        name: 'Database'
+        name: 'Display'
       }
       if (this.search !== '') {
         route.query = {

@@ -73,25 +73,23 @@ export const updateCollection = function ({ commit }, collectionName) {
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries based on query
   */
 export const updateCollectionQuery = function ({ commit }, query) {
-  let documentsLost = []
-  this.state.db
-    .collection('lost-items')
-    .where('type', '==', query)
-    .get()
-    .then(lostItems => {
-      pushDocuments(lostItems, documentsLost)
-      commit('setQueriedLostItems', documentsLost)
-      let documentsFound = []
-      this.state.db
-        .collection('found-items')
-        .where('type', '==', query)
-        .get()
-        .then(foundItems => {
-          pushDocuments(foundItems, documentsFound)
-          commit('setQueriedFoundItems', documentsFound)
-        })
-    })
-    .catch(function (error) {
-      console.log('Error getting documents: ', error)
-    })
+  this.state.algoliaIndex.search(
+    {
+      query,
+      attributesToRetrieve: [
+        'type',
+        'description',
+        'date',
+        'time',
+        'contactEmail'
+      ],
+      hitsPerPage: 20
+    },
+    function searchDone (err, content) {
+      if (err) {
+        return console.error(err)
+      }
+      commit('setQueriedItems', content.hits)
+    }
+  )
 }
