@@ -19,7 +19,9 @@ if (process.env.TRAVIS) {
     PROJECT_ID: process.env.PROJECT_ID,
     STORAGE_BUCKET: process.env.STORAGE_BUCKET,
     MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
-    GOOGLE_MAPS_API: process.env.GOOGLE_MAPS_API
+    ALGOLIA_APP_ID: process.env.ALGOLIA_APP_ID,
+    ALGOLIA_API_KEY: process.env.ALGOLIA_API_KEY,
+    ALGOLIA_INDEX_NAME: process.env.ALGOLIA_INDEX_NAME
   }
 } else {
   console.log('Not on Travis, get env variables from dev.env!')
