@@ -2,6 +2,10 @@ export const stillLoading = function (state, loadingStatus) {
   state.stillLoading = loadingStatus
 }
 
+export const toggleMapStillLoading = function (state, loadingStatus) {
+  state.mapStillLoading = loadingStatus
+}
+
 export const setAllLostItems = function (state, items) {
   state.allLostItems = items.map((item) => {
     item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
@@ -45,6 +49,14 @@ export const toggleCluster = function (state, toggle) {
   state.clusterOn = toggle
 }
 
-export const setSelectedLostMarker = function (state, marker) {
-  state.selectedLostMarker = marker
+export const setZoomEnd = function (state, zoomEnd) {
+  state.zoomEnd = zoomEnd
+}
+
+export const setSelectedMarker = function (state, marker) {
+  state.selectedMarker = marker
+}
+
+export const setMap = function (state, map) {
+  state.map = map
 }

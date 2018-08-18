@@ -25,7 +25,7 @@ import { LMarker, LPopup } from 'vue2-leaflet'
 import { mapActions } from 'vuex'
 
 export default {
-  props: ['foundItem', 'selectedFoundMarker'],
+  props: ['foundItem'],
   components: {
     LMarker,
     LPopup
@@ -33,6 +33,17 @@ export default {
   data () {
     return {
       marker: null
+    }
+  },
+  methods: {
+    ...mapActions([
+      'setSelectedMarker'
+    ]),
+    test () {
+      this.setSelectedMarker(this.foundItem)
+      const itemID = this.foundItem.id
+      const collectionType = this.foundItem.collection === 'lost' ? 'l' : 'f'
+      this.$router.push(`/${collectionType}-${itemID}`)
     }
   },
   computed: {
@@ -43,37 +54,6 @@ export default {
         iconAnchor: [20, 20]
       })
     }
-  },
-  methods: {
-    ...mapActions([
-      'setZoom',
-      'setCenter'
-    ]),
-    popUp (selectedFoundMarker) {
-      const thisIsTheSelectedMarker = selectedFoundMarker === this.foundItem.id
-      if (this.marker && thisIsTheSelectedMarker) {
-        this.setZoom(20)
-        this.setCenter(L.latLng(this.foundItem.coordinates.lat, this.foundItem.coordinates.lng))
-        setTimeout(() => {
-          this.marker.mapObject.openPopup()
-        }, 0)
-      }
-    }
-  },
-  watch: {
-    selectedFoundMarker: {
-      immediate: true,
-      handler (selectedFoundMarker) {
-        this.popUp(selectedFoundMarker)
-      }
-    }
-  },
-  mounted () {
-    this.$nextTick(function () {
-      this.marker = this.$refs['f' + this.foundItem.id]
-      this.popUp(this.selectedFoundMarker)
-    })
   }
-
 }
 </script>

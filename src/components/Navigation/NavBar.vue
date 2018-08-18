@@ -42,7 +42,7 @@
                  class="">
             <v-icon left>home</v-icon> Home
           </v-btn>
-          <display-button></display-button>
+          <display-button v-if="mapStillLoading"></display-button>
         </v-toolbar-items>
       </template>
 
@@ -117,7 +117,8 @@ export default {
     ...mapGetters([
       'isUserLoggedIn',
       'user',
-      'stillLoading'
+      'stillLoading',
+      'mapStillLoading'
     ])
   },
   methods: {

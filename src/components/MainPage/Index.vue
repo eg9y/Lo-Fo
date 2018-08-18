@@ -18,7 +18,8 @@
       :user="user"></submission-form>
 
     <!-- The UCSC map -->
-    <l-map id="mapDialogFirst"
+    <l-map v-if="mapStillLoading"
+      id="mapDialogFirst"
       style="height: 100%"
       :zoom="zoom"
       :center="center"
@@ -28,22 +29,24 @@
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
         :attribution="attribution"></l-tile-layer>
-      <v-marker-cluster :options="clusterOptions">
+      <v-marker-cluster :options="clusterOptions"
+        ref="cluster">
 
         <!-- found items markers -->
         <found-items-markers v-if="foundToggle"
-          :selectedFoundMarker="selectedFoundMarker"
           @deleteMarker="deleteMarker"></found-items-markers>
 
         <!-- lost items markers -->
-        <lost-items-markers v-if="lostToggle"
-          @deleteMarker="deleteMarker"></lost-items-markers>
-
-        <!-- selected location -->
-        <l-marker v-if="selectedLatLng"
-          :lat-lng="selectedLatLng"></l-marker>
+        <lost-items-markers v-if="lostToggle"></lost-items-markers>
       </v-marker-cluster>
+      <!-- selected location -->
+      <l-marker v-if="selectedLatLng"
+        :lat-lng="selectedLatLng"></l-marker>
+
     </l-map>
+    <template v-else>
+      <h1>Map loading...</h1>
+    </template>
   </div>
 </template>
 
@@ -87,7 +90,6 @@ export default {
       lost_items: [],
       found_items: [],
       triggerPopFound: null,
-      selectedFoundMarker: null,
       alert: false,
       clusterOptions: {}
     }
@@ -101,29 +103,26 @@ export default {
       'isUserLoggedIn',
       'user',
       'stillLoading',
+      'mapStillLoading',
       'allLostItems',
       'allFoundItems',
       'lostToggle',
       'foundToggle',
       'center',
       'zoom',
-      'selectedLostMarker'
-    ]),
-    mapOptions () {
-      return {
-        minZoom: 17,
-        maxZoom: 18,
-        gestureHandling: this.$vuetify.breakpoint.width >= '710' ? 'cooperative' : 'greedy',
-        draggableCursor: 'url(http://s3.amazonaws.com/besport.com_images/status-pin.png), auto'
-      }
-    }
+      'selectedMarker',
+      'map'
+    ])
   },
   methods: {
     ...mapActions([
       'updateUserCollection',
       'updateCollection',
       'toggleCluster',
-      'setSelectedLostMarker'
+      'setZoomEnd',
+      'setAllowPopupOnZoom',
+      'setCluster',
+      'setMap'
     ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
@@ -143,29 +142,29 @@ export default {
     */
     deleteMarker (markerInfo) {
       // deletes associated picture if item has one, and it's stored in Storage
-      const picture = markerInfo[0]
-      const id = markerInfo[1]
-      const userID = markerInfo[2]
-      const collectionName = markerInfo[3]
-
-      if (picture && picture.includes(userID)) {
-        var picRef = this.firebase.storage().refFromURL(picture)
-        picRef.delete().then(function () {
-          console.log('Image successfully deleted from Storage')
-          // eslint-disable-next-line
-        }).catch(function (error) {
-          console.log('Error in deleting image from Storage')
-        })
-      }
+      console.log('hi')
+      // const picture = markerInfo.picture
+      // const id = markerInfo.id
+      // const userID = markerInfo.userID
+      // const collectionName = (markerInfo.collection === 'lost') ? 'lost-items' : 'found-items'
+      // if (picture && picture.includes(userID)) {
+      //   var picRef = this.firebase.storage().refFromURL(picture)
+      //   picRef.delete().then(function () {
+      //     console.log('Image successfully deleted from Storage')
+      //     // eslint-disable-next-line
+      //   }).catch(function (error) {
+      //     console.log('Error in deleting image from Storage')
+      //   })
+      // }
 
       // deletes the entry from the db and then updates the local copies
-      this.db.collection(collectionName).doc(id).delete().then(() => {
-        this.updateUserCollection(collectionName)
-        this.updateCollection(collectionName)
-        console.log('Document successfully deleted!')
-      }).catch(function (error) {
-        console.error('Error removing document: ', error)
-      })
+      // this.db.collection(collectionName).doc(id).delete().then(() => {
+      //   this.updateUserCollection(collectionName)
+      //   this.updateCollection(collectionName)
+      //   console.log('Document successfully deleted!')
+      // }).catch(function (error) {
+      //   console.error('Error removing document: ', error)
+      // })
     },
     /*
       Given itemStr, searches for correct item in allLostItems or allFoundItems
@@ -174,13 +173,39 @@ export default {
     */
     findMarker (itemStr) {
       console.log('findMarker is running, looking for: ' + itemStr)
-      const itemID = itemStr.substr(2)
-      if (itemStr[0] === 'f') {
-        this.selectedFoundMarker = itemID
-        this.setSelectedLostMarker(null)
-      } else {
-        this.setSelectedLostMarker(itemID)
-        this.selectedFoundMarker = null
+    },
+    createButton (label, container) {
+      var btn = L.DomUtil.create('button', '', container)
+      btn.setAttribute('type', 'button')
+      btn.setAttribute('id', 'test')
+      btn.setAttribute('class', 'button')
+      btn.innerHTML = label
+      L.DomEvent.on(container, 'click', () => {
+        this.deleteMarker(this.selectedMarker)
+      })
+      return btn
+    },
+    setPopup () {
+      if (this.selectedMarker) {
+        const timestamp = this.selectedMarker.time + ' ' + this.selectedMarker.date
+        const container = L.DomUtil.create('div')
+        container.innerHTML =
+          `
+          <h1 style="text-align: center;">Lost: ${this.selectedMarker.type}</h1>
+          <img src="${this.selectedMarker.picture || ''}"/>
+          <h3>${this.selectedMarker.description}</h3>
+          <h3>${timestamp}</h3>
+          <h3>${this.selectedMarker.contactEmail}</h3>
+          `
+
+        if (this.isUserLoggedIn && this.user.uid === this.selectedMarker.userID) {
+          this.createButton('Resolve', container)
+        }
+
+        L.popup()
+          .setLatLng(L.latLng([this.selectedMarker.coordinates.lat, this.selectedMarker.coordinates.lng]))
+          .setContent(container)
+          .openOn(this.map)
       }
     }
   },
@@ -199,17 +224,12 @@ export default {
       immediate: true,
       handler (val) {
         if (val) {
-          this.findMarker(val)
+          this.setPopup()
         }
       }
     },
-    clusterOn (status) {
-      // if no cluster
-      if (!status) {
-        setTimeout(() => {
-          this.toggleCluster(true)
-        }, 2000)
-      }
+    selectedMarker () {
+      this.setPopup()
     }
   },
   created () {
@@ -220,26 +240,19 @@ export default {
       }
       this.submissionDialog = false
     })
-    EventBus.$on('newCenter', (newCenter) => {
-      this.center = {
-        lat: newCenter.coordinates.lat,
-        lng: newCenter.coordinates.lng
-      }
-    })
   },
   /*
     Set up clustering options
   */
   mounted () {
-    setTimeout(() => {
-      console.log('done')
-      this.$nextTick(() => {
-        this.clusterOptions = {
-          animateAddingMarkers: false,
-          disableClusteringAtZoom: 11
-        }
-      })
-    }, 5000)
+    this.$nextTick(() => {
+      this.clusterOptions = {
+        animateAddingMarkers: false,
+        disableClusteringAtZoom: 11
+      }
+      this.setMap(this.$refs.map.mapObject)
+      this.setPopup()
+    })
   },
   filters: {
     /*
@@ -262,7 +275,21 @@ img {
   width: 100%;
   height: auto;
 }
+
 #mapDialogFirst {
   z-index: 0;
+}
+
+.button {
+  background-color: rgb(214, 78, 78);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 </style>

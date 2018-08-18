@@ -4,6 +4,10 @@ export const stillLoading = function ({ commit }, loadingStatus) {
   commit('stillLoading', loadingStatus)
 }
 
+export const toggleMapStillLoading = function ({ commit }, loadingStatus) {
+  commit('toggleMapStillLoading', loadingStatus)
+}
+
 export const setAllLostItems = function ({ commit }, items) {
   commit('setAllLostItems', items)
 }
@@ -24,9 +28,22 @@ export const setCenter = function ({ commit }, newCenter) {
   commit('setCenter', newCenter)
 }
 
-export const setSelectedLostMarker = function ({ commit }, marker) {
-  commit('setSelectedLostMarker', marker)
+export const setZoomEnd = function ({ commit }, zoomEnd) {
+  commit('setZoomEnd', zoomEnd)
 }
+
+export const setAllowPopupOnZoom = function ({ commit }, status) {
+  commit('setAllowPopupOnZoom', status)
+}
+
+export const setSelectedMarker = function ({ commit }, marker) {
+  commit('setSelectedMarker', marker)
+}
+
+export const setMap = function ({ commit }, map) {
+  commit('setMap', map)
+}
+
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
   */

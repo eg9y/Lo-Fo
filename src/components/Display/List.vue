@@ -70,7 +70,7 @@
               <v-btn bottom
                 flat
                 color="cyan"
-                @click="locateItem(submission.id, collectionCode(submission.collection))">Location</v-btn>
+                @click="locateItem(submission)">Location</v-btn>
             </v-card-actions>
             <br/>
           </v-card>
@@ -81,13 +81,25 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   props: ['collectionCluster'],
   data () {
     return {
     }
   },
+  computed: {
+    ...mapGetters([
+      'map'
+    ])
+  },
   methods: {
+    ...mapActions([
+      'setSelectedMarker',
+      'setZoom',
+      'setCenter'
+    ]),
     collectionCode (value) {
       if (value === 'lost') {
         return 'l'
@@ -98,7 +110,12 @@ export default {
     /*
       Used in the Location button to redirect to the home page with the info window of the item open
     */
-    locateItem (itemID, collectionType) {
+    locateItem (submission) {
+      const itemID = submission.id
+      const collectionType = this.collectionCode(submission.collection)
+      this.setSelectedMarker(submission)
+      this.setZoom(20)
+      this.setCenter(L.latLng([submission.coordinates.lat, submission.coordinates.lng]))
       this.$router.push(`/${collectionType}-${itemID}`)
     },
     lostOrFound (collection) {

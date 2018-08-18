@@ -1,9 +1,12 @@
 <!-- This is the Side Nav Component-->
 <template>
-  <v-navigation-drawer v-model="drawer" absolute temporary>
+  <v-navigation-drawer v-model="drawer"
+    absolute
+    temporary>
 
     <!-- This part of the drawer displays the User Info-->
-    <v-list class="pa-1" v-if="user">
+    <v-list class="pa-1"
+      v-if="user">
       <v-list-tile avatar>
         <v-list-tile-avatar>
           <img :src="user.photoURL">
@@ -15,7 +18,8 @@
       </v-list-tile>
     </v-list>
 
-    <v-list class="pt-0" dense>
+    <v-list class="pt-0"
+      dense>
       <v-divider></v-divider>
 
       <v-list-tile to="/Profile">
@@ -44,7 +48,9 @@
       <!-- This part of the drawer diplays the user's submission history, and center the map on the clicked entry -->
       <v-subheader inset>History</v-subheader>
 
-      <v-list-tile v-for="lost_item in lost_items" :key="lost_item.id" @click="center(lost_item, 'lost')">
+      <v-list-tile v-for="lost_item in lost_items"
+        :key="lost_item.id"
+        @click="center(lost_item, 'lost')">
         <v-list-tile-action>
           <v-icon>sentiment_very_dissatisfied</v-icon>
         </v-list-tile-action>
@@ -56,7 +62,9 @@
         </v-list-tile-content>
       </v-list-tile>
 
-      <v-list-tile v-for="found_item in found_items" :key="found_item.id" @click="center(found_item, 'found')">
+      <v-list-tile v-for="found_item in found_items"
+        :key="found_item.id"
+        @click="center(found_item, 'found')">
         <v-list-tile-action>
           <v-icon>sentiment_very_satisfied</v-icon>
         </v-list-tile-action>
@@ -90,25 +98,28 @@ export default {
       'isUserLoggedIn',
       'user',
       'lost_items',
-      'found_items'
+      'found_items',
+      'map'
     ])
   },
   methods: {
     ...mapActions([
-      'signOut'
+      'signOut',
+      'setZoom',
+      'setCenter',
+      'setSelectedMarker'
     ]),
     /*
       Passes the information for an item to the GMap component
       Information is used to center the view on the marker and open the marker's info window
     */
-    center (lostItem, collection) {
-      let symbol
-      if (collection === 'lost') {
-        symbol = 'l'
-      } else {
-        symbol = 'f'
-      }
-      this.$router.push(`/${symbol}-${lostItem.id}`)
+    center (item, collection) {
+      this.setSelectedMarker(item)
+
+      // Sets new zoom and center value for map
+      this.map.setView(L.latLng(item.coordinates.lat, item.coordinates.lng), 20)
+      const symbol = collection === 'lost' ? 'l' : 'f'
+      this.$router.push(`/${symbol}-${item.id}`)
     },
     /*
       Passes the drawer status (open/closed) to the map component

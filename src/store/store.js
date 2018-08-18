@@ -16,6 +16,7 @@ export default new Vuex.Store({
   },
   state: {
     stillLoading: true,
+    mapStillLoading: true,
     allLostItems: null,
     allFoundItems: null,
     queriedLostItems: null,
@@ -26,9 +27,10 @@ export default new Vuex.Store({
     // if lostToggle/foundToggle is false = hide lost/found markers
     lostToggle: true,
     foundToggle: true,
-    center: L.latLng(36.991326, -122.058761),
+    center: L.latLng([36.991326, -122.058761]),
     zoom: 16,
-    selectedLostMarker: null
+    selectedMarker: null,
+    map: null
   },
   getters,
   mutations,
