@@ -3,8 +3,8 @@
 <template>
   <div>
     <v-toolbar dark
-               color="primary"
-               v-if="!stillLoading">
+      color="primary"
+      v-if="!stillLoading">
 
       <!-- Mobile View -->
       <template v-if="$vuetify.breakpoint.width < 710">
@@ -14,19 +14,19 @@
           </v-toolbar-title>
           <v-list>
             <v-list-tile v-if="!this.isUserLoggedIn"
-                         @click="auth">
+              @click="auth">
               <v-list-tile-title>
                 Sign In
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-else
-                         @click="signOut">
+              @click="signOut">
               <v-list-tile-title>
                 Sign Out
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-if="this.isUserLoggedIn"
-                         to="/profile">
+              to="/profile">
               <v-list-tile-title>
                 {{user.displayName}}
               </v-list-tile-title>
@@ -36,10 +36,10 @@
         <v-spacer></v-spacer>
         <v-toolbar-items>
           <v-btn flat
-                 dark
-                 router
-                 to="/"
-                 class="">
+            dark
+            router
+            to="/"
+            class="">
             <v-icon left>home</v-icon> Home
           </v-btn>
           <display-button v-if="mapStillLoading"></display-button>
@@ -49,15 +49,15 @@
       <!-- Desktop View -->
       <template v-if="$vuetify.breakpoint.width >= 710">
         <v-toolbar-side-icon v-if="this.isUserLoggedIn"
-                             @click.stop="drawer = !drawer">
+          @click.stop="drawer = !drawer">
         </v-toolbar-side-icon>
-        <v-toolbar-title class="white--text">Lost And Found</v-toolbar-title>
+        <v-toolbar-title class="white--text">Lo-Fo</v-toolbar-title>
         <v-spacer></v-spacer>
 
         <!-- Home button -->
         <v-toolbar-items>
           <v-btn to="/"
-                 flat>
+            flat>
             <v-icon left>home</v-icon> Home
           </v-btn>
           <display-button></display-button>
@@ -66,17 +66,17 @@
         <!-- Sign in/out buttons -->
         <v-toolbar-items v-if="!this.isUserLoggedIn">
           <v-btn @click="auth"
-                 flat>
+            flat>
             Sign In
           </v-btn>
         </v-toolbar-items>
         <v-toolbar-items v-else>
           <v-btn @click="signOut"
-                 flat>
+            flat>
             Sign Out
           </v-btn>
           <v-btn to="/profile"
-                 flat>
+            flat>
             <v-icon left>face</v-icon> {{user.displayName}}
           </v-btn>
         </v-toolbar-items>
@@ -86,7 +86,7 @@
     <!-- Loading bar -->
     <template v-else>
       <v-progress-linear :indeterminate="true"
-                         color="info"></v-progress-linear>
+        color="info"></v-progress-linear>
     </template>
 
     <!-- Side nav drawer -->
@@ -135,17 +135,6 @@ export default {
         'login_hint': 'cruzid@ucsc.edu'
       })
       this.firebase.auth().signInWithRedirect(provider)
-    },
-    /*
-      Signs the user out
-    */
-    signOut () {
-      this.firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        this.signOut()
-      }).catch(function (error) {
-        console.log(error)
-      })
     }
   },
   created () {

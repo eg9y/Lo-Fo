@@ -17,36 +17,10 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-
-    <v-list class="pt-0"
-      dense>
-      <v-divider></v-divider>
-
-      <v-list-tile to="/Profile">
-        <v-list-tile-action>
-          <v-icon>library_books</v-icon>
-        </v-list-tile-action>
-
-        <v-list-tile-content>
-          <v-list-tile-title>Profile</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-
-      <v-list-tile @click="signOut">
-        <v-list-tile-action>
-          <v-icon>power_settings_new</v-icon>
-        </v-list-tile-action>
-
-        <v-list-tile-content>
-          <v-list-tile-title>Sign Out</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-
     <v-list>
       <v-divider></v-divider>
       <!-- This part of the drawer diplays the user's submission history, and center the map on the clicked entry -->
-      <v-subheader inset>History</v-subheader>
+      <v-subheader inset>My items</v-subheader>
 
       <v-list-tile v-for="lost_item in lost_items"
         :key="lost_item.id"

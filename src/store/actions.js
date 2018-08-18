@@ -70,6 +70,22 @@ export const updateCollection = function ({ commit }, collectionName) {
 }
 
 /*
+      Signs the user out
+    */
+export const signOut = function () {
+  this.state.firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      // Sign-out successful.
+      this.signOut()
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+/*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries based on query
   */
 export const updateCollectionQuery = function ({ commit }, query) {
