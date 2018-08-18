@@ -7,17 +7,19 @@ export const toggleMapStillLoading = function (state, loadingStatus) {
 }
 
 export const setAllLostItems = function (state, items) {
-  state.allLostItems = items.map((item) => {
-    item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
-    return item
-  }) || items
+  state.allLostItems =
+    items.map(item => {
+      item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
+      return item
+    }) || items
 }
 
 export const setAllFoundItems = function (state, items) {
-  state.allFoundItems = items.map((item) => {
-    item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
-    return item
-  }) || items
+  state.allFoundItems =
+    items.map(item => {
+      item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
+      return item
+    }) || items
 }
 
 export const setQueriedLostItems = function (state, items) {
@@ -59,4 +61,8 @@ export const setSelectedMarker = function (state, marker) {
 
 export const setMap = function (state, map) {
   state.map = map
+}
+
+export const setPopupClicked = function (state, popupStatus) {
+  state.popupClicked = popupStatus
 }

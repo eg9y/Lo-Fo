@@ -30,7 +30,8 @@ export default new Vuex.Store({
     center: L.latLng([36.991326, -122.058761]),
     zoom: 16,
     selectedMarker: null,
-    map: null
+    map: null,
+    popupClicked: false
   },
   getters,
   mutations,

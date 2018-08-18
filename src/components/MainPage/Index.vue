@@ -33,8 +33,7 @@
         ref="cluster">
 
         <!-- found items markers -->
-        <found-items-markers v-if="foundToggle"
-          @deleteMarker="deleteMarker"></found-items-markers>
+        <found-items-markers v-if="foundToggle"></found-items-markers>
 
         <!-- lost items markers -->
         <lost-items-markers v-if="lostToggle"></lost-items-markers>
@@ -111,7 +110,8 @@ export default {
       'center',
       'zoom',
       'selectedMarker',
-      'map'
+      'map',
+      'popupClicked'
     ])
   },
   methods: {
@@ -121,8 +121,9 @@ export default {
       'toggleCluster',
       'setZoomEnd',
       'setAllowPopupOnZoom',
-      'setCluster',
-      'setMap'
+      'setMap',
+      'setSelectedMarker',
+      'setPopupClicked'
     ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
@@ -132,7 +133,13 @@ export default {
       if (!this.isUserLoggedIn) {
         this.alert = true
         return
+      } else if (this.popupClicked) {
+        this.setPopupClicked(false)
+        this.setSelectedMarker(null)
+        console.log('popup closed')
+        return
       }
+      console.log(L.popup().isOpen())
       this.selectedLatLng = e.latlng
       // // open the submission form
       this.submissionDialog = true
@@ -142,37 +149,31 @@ export default {
     */
     deleteMarker (markerInfo) {
       // deletes associated picture if item has one, and it's stored in Storage
-      console.log('hi')
-      // const picture = markerInfo.picture
-      // const id = markerInfo.id
-      // const userID = markerInfo.userID
-      // const collectionName = (markerInfo.collection === 'lost') ? 'lost-items' : 'found-items'
-      // if (picture && picture.includes(userID)) {
-      //   var picRef = this.firebase.storage().refFromURL(picture)
-      //   picRef.delete().then(function () {
-      //     console.log('Image successfully deleted from Storage')
-      //     // eslint-disable-next-line
-      //   }).catch(function (error) {
-      //     console.log('Error in deleting image from Storage')
-      //   })
-      // }
+      const picture = markerInfo.picture
+      const id = markerInfo.id
+      const userID = markerInfo.userID
+      const collectionName = (markerInfo.collection === 'lost') ? 'lost-items' : 'found-items'
+      this.map.closePopup()
+      if (picture && picture.includes(userID)) {
+        var picRef = this.firebase.storage().refFromURL(picture)
+        picRef.delete().then(function () {
+          console.log('Image successfully deleted from Storage')
+          // eslint-disable-next-line
+        }).catch(function (error) {
+          console.log('Error in deleting image from Storage')
+        })
+      }
 
       // deletes the entry from the db and then updates the local copies
-      // this.db.collection(collectionName).doc(id).delete().then(() => {
-      //   this.updateUserCollection(collectionName)
-      //   this.updateCollection(collectionName)
-      //   console.log('Document successfully deleted!')
-      // }).catch(function (error) {
-      //   console.error('Error removing document: ', error)
-      // })
-    },
-    /*
-      Given itemStr, searches for correct item in allLostItems or allFoundItems
-      Parameters: itemStr -- string in the form of <x>-<item id>, where item id is the unique id from the database,
-      and x is 'l' for items in the lost collection and 'f' for items in the found collection
-    */
-    findMarker (itemStr) {
-      console.log('findMarker is running, looking for: ' + itemStr)
+      this.db.collection(collectionName).doc(id).delete().then(() => {
+        this.updateUserCollection(collectionName)
+        this.updateCollection(collectionName)
+        console.log('Document successfully deleted!')
+        L.popup()
+          .closePopup()
+      }).catch(function (error) {
+        console.error('Error removing document: ', error)
+      })
     },
     createButton (label, container) {
       var btn = L.DomUtil.create('button', '', container)
@@ -185,7 +186,27 @@ export default {
       })
       return btn
     },
-    setPopup () {
+    /*
+      Given itemStr, searches for correct item in allLostItems or allFoundItems
+      Parameters: itemStr -- string in the form of <x>-<item id>, where item id is the unique id from the database,
+      and x is 'l' for items in the lost collection and 'f' for items in the found collection
+    */
+    setPopup (param) {
+      if (!this.selectedMarker && this.allLostItems && this.allFoundItems && param) {
+        const itemID = param.substr(2)
+        this.allLostItems.forEach(item => {
+          if (item.id === itemID) {
+            this.setSelectedMarker(item)
+          }
+        })
+        if (!this.selectedMarker) {
+          this.allFoundItems.forEach(item => {
+            if (item.id === itemID) {
+              this.setSelectedMarker(item)
+            }
+          })
+        }
+      }
       if (this.selectedMarker) {
         const timestamp = this.selectedMarker.time + ' ' + this.selectedMarker.date
         const container = L.DomUtil.create('div')
@@ -201,7 +222,6 @@ export default {
         if (this.isUserLoggedIn && this.user.uid === this.selectedMarker.userID) {
           this.createButton('Resolve', container)
         }
-
         L.popup()
           .setLatLng(L.latLng([this.selectedMarker.coordinates.lat, this.selectedMarker.coordinates.lng]))
           .setContent(container)
@@ -212,19 +232,19 @@ export default {
   watch: {
     allLostItems () {
       if (this.$route.params.id) {
-        // this.findMarker(this.$route.params.id)
+        this.setPopup(this.$route.params.id)
       }
     },
     allFoundItems () {
       if (this.$route.params.id) {
-        // this.findMarker(this.$route.params.id)
+        this.setPopup(this.$route.params.id)
       }
     },
     '$route.params.id': {
       immediate: true,
-      handler (val) {
-        if (val) {
-          this.setPopup()
+      handler (param) {
+        if (param) {
+          // this.setPopup(param)
         }
       }
     },

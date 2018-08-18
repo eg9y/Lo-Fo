@@ -1,23 +1,9 @@
 <template>
-  <l-marker
-    :lat-lng="foundItem.coordinates"
+  <l-marker :lat-lng="foundItem.coordinates"
     :icon="icon"
     :ref="`f${foundItem.id}`"
-  >
-    <l-popup>
-      <v-layout>
-        <v-flex class="text-xs-center">
-          <slot name="header"></slot>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex>
-          <slot name="body"></slot>
-        </v-flex>
-      </v-layout>
-      <slot name="interaction"></slot>
-    </l-popup>
-    </l-marker>
+    @click="setMarker">
+  </l-marker>
 </template>
 
 <script>
@@ -37,9 +23,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setSelectedMarker'
+      'setSelectedMarker',
+      'setPopupClicked'
     ]),
-    test () {
+    setMarker () {
+      this.setPopupClicked(true)
       this.setSelectedMarker(this.foundItem)
       const itemID = this.foundItem.id
       const collectionType = this.foundItem.collection === 'lost' ? 'l' : 'f'

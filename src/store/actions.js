@@ -1,4 +1,4 @@
-import {pushDocuments} from './helperFunction'
+import { pushDocuments } from './helperFunction'
 
 export const stillLoading = function ({ commit }, loadingStatus) {
   commit('stillLoading', loadingStatus)
@@ -42,6 +42,10 @@ export const setSelectedMarker = function ({ commit }, marker) {
 
 export const setMap = function ({ commit }, map) {
   commit('setMap', map)
+}
+
+export const setPopupClicked = function ({ commit }, popupStatus) {
+  commit('setPopupClicked', popupStatus)
 }
 
 /*

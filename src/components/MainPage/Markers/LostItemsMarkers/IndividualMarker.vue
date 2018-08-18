@@ -2,8 +2,7 @@
   <l-marker :lat-lng="lostItem.coordinates"
     :icon="icon"
     :ref="`l${lostItem.id}`"
-    @click="test"
-    >
+    @click="setMarker">
   </l-marker>
 </template>
 
@@ -26,7 +25,7 @@ export default {
     ...mapActions([
       'setSelectedMarker'
     ]),
-    test () {
+    setMarker () {
       this.setSelectedMarker(this.lostItem)
       const itemID = this.lostItem.id
       const collectionType = this.lostItem.collection === 'lost' ? 'l' : 'f'
