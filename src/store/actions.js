@@ -81,7 +81,10 @@ export const updateCollectionQuery = function ({ commit }, query) {
         'description',
         'date',
         'time',
-        'contactEmail'
+        'contactEmail',
+        'picture',
+        'coordinates',
+        'objectID'
       ],
       hitsPerPage: 20
     },

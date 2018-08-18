@@ -111,7 +111,7 @@ export default {
       Used in the Location button to redirect to the home page with the info window of the item open
     */
     locateItem (submission) {
-      const itemID = submission.id
+      const itemID = submission.id || submission.objectID
       const collectionType = this.collectionCode(submission.collection)
       this.setSelectedMarker(submission)
       this.setZoom(20)

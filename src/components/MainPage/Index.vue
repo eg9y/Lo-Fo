@@ -292,7 +292,7 @@ export default {
       }
       this.setMap(this.$refs.map.mapObject)
       this.setPopup()
-      this.map.locate({})
+      // this.map.locate({})
       this.map.on('locationfound', this.onLocationFound)
     })
   },
