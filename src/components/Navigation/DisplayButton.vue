@@ -7,7 +7,8 @@
     <v-btn slot="activator"
       id="display-button"
       flat>
-      <v-icon left>icon-th-list</v-icon>
+      <v-icon left
+        color="display">icon-th-list</v-icon>
       Display
     </v-btn>
     <v-list>

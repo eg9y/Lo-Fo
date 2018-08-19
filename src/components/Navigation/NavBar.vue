@@ -7,10 +7,19 @@
 
       <!-- Mobile View -->
       <template v-if="$vuetify.breakpoint.width < 710">
+        <v-toolbar-items>
+          <v-btn id="home-button"
+            dark
+            router
+            to="/"
+            class="">
+            <v-icon>icon-home-1</v-icon>
+          </v-btn>
+        </v-toolbar-items>
         <v-menu :nudge-width="100">
           <v-toolbar-title slot="activator">
-            <v-toolbar-side-icon to="/">
-              <v-icon>icon-home-1</v-icon>
+            <v-toolbar-side-icon>
+              <v-icon>icon-cog</v-icon>
             </v-toolbar-side-icon>
           </v-toolbar-title>
           <v-list>
@@ -26,7 +35,7 @@
               @click="signOut"
               id="signout-button">
               <v-list-tile-title>
-                <v-icon>eject</v-icon> Sign Out
+                <v-icon>icon-logout</v-icon> Sign Out
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-if="this.isUserLoggedIn"
@@ -41,13 +50,6 @@
         </v-menu>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn id="home-button"
-            dark
-            router
-            to="/"
-            class="">
-            <v-icon left>icon-home-1</v-icon> Home
-          </v-btn>
           <display-button v-if="mapStillLoading"></display-button>
         </v-toolbar-items>
       </template>
@@ -66,7 +68,8 @@
             v-if="this.isUserLoggedIn"
             @click.stop="drawer = !drawer"
             flat>
-            <v-icon left>icon-box</v-icon>
+            <v-icon left
+              color="box">icon-box</v-icon>
             My Items
           </v-btn>
           <display-button></display-button>
@@ -85,13 +88,27 @@
           <v-btn @click="signOut"
             id="signout-button"
             flat>
-            <v-icon>icon-logout</v-icon> Sign Out
+            <v-icon left
+              color="signOut">icon-logout</v-icon> Sign Out
           </v-btn>
           <v-btn id="profile-button"
             light
             to="/profile"
             flat>
-            <v-icon left>icon-user</v-icon> {{user.displayName}}
+            <v-layout>
+              <v-flex mr-2>
+                <v-avatar :tile="true"
+                  :size="30"
+                  color="grey lighten-4">
+                  <img id="profile-image"
+                    :src="user.photoURL"
+                    alt="">
+                </v-avatar>
+              </v-flex>
+              <v-flex mt-1>
+                {{user.displayName}}
+              </v-flex>
+            </v-layout>
           </v-btn>
         </v-toolbar-items>
       </template>
@@ -166,9 +183,13 @@ export default {
   background-color: #da216d !important;
 }
 #signin-button {
-  background-color: rgb(45, 189, 93) !important;
+  background-color: #93c02d !important;
 }
 #profile-button {
   background-color: #fdc700 !important;
+}
+#profile-image {
+  max-width: 30px;
+  border: 1px solid black;
 }
 </style>

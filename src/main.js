@@ -38,7 +38,9 @@ Vue.use(VueRouter)
 Vue.use(Vuetify, {
   theme: {
     primary: '#1C77C3',
-    accent: '#39A9DB'
+    accent: '#39A9DB',
+    box: '#B26D00',
+    display: '#AD6500'
   },
   icons: {
     next: 'icon-right-open',

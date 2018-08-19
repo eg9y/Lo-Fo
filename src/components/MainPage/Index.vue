@@ -127,7 +127,9 @@ export default {
       'popupClicked'
     ]),
     accurateLatLng () {
-      return L.latLng(this.selectedLatLng.lat - 0.0006, this.selectedLatLng.lng + 0.00001)
+      const point = this.map.latLngToContainerPoint(this.selectedLatLng)
+      var newPoint = L.point([point.x - 0.2, point.y + 20])
+      return this.map.containerPointToLatLng(newPoint)
     }
   },
   methods: {
@@ -156,7 +158,6 @@ export default {
         this.alert = true
         return
       }
-      console.log(L.popup().isOpen())
       this.selectedLatLng = e.latlng
       // // open the submission form
       this.submissionDialog = true
@@ -227,11 +228,12 @@ export default {
         }
       }
       if (this.selectedMarker) {
+        const label = this.selectedMarker.collection === 'lost' ? 'Lost:' : 'Found:'
         const timestamp = this.selectedMarker.time + ' ' + this.selectedMarker.date
         const container = L.DomUtil.create('div')
         container.innerHTML =
           `
-          <h1 style="text-align: center;">Lost: ${this.selectedMarker.type}</h1>
+          <h1 style="text-align: center;">${label} ${this.selectedMarker.type}</h1>
           <img src="${this.selectedMarker.picture || ''}"/>
           <h3>${this.selectedMarker.description}</h3>
           <h3>${timestamp}</h3>
@@ -275,6 +277,11 @@ export default {
     },
     selectedMarker () {
       this.setPopup()
+    },
+    popupClicked (clicked) {
+      if (clicked) {
+        this.selectedLatLng = null
+      }
     }
   },
   created () {

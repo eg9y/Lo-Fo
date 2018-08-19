@@ -1,8 +1,8 @@
 <template>
-  <v-text-field prepend-icon="search"
+  <v-text-field prepend-icon="icon-search"
     hide-details
     single-line
-    label="Search by type"
+    label="Search by type, description, contact, time"
     v-model="search">
   </v-text-field>
 </template>

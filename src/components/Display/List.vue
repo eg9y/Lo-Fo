@@ -8,6 +8,7 @@
       class="mt-2 mr-2 ml-2">
       <v-flex v-for="(submission, index) in cluster"
         :key="index"
+        v-if="submissionExists(submission)"
         :xs3="$vuetify.breakpoint.width >= 885"
         :xs4="$vuetify.breakpoint.width < 885"
         :xs6="$vuetify.breakpoint.width < 612"
@@ -111,6 +112,9 @@ export default {
       Used in the Location button to redirect to the home page with the info window of the item open
     */
     locateItem (submission) {
+      if (!submission) {
+        return
+      }
       const itemID = submission.id || submission.objectID
       const collectionType = this.collectionCode(submission.collection)
       this.setSelectedMarker(submission)
@@ -124,6 +128,12 @@ export default {
       } else {
         return 'Found: '
       }
+    },
+    submissionExists (submission) {
+      return submission &&
+        submission.hasOwnProperty('description') &&
+        submission.hasOwnProperty('type') &&
+        submission.hasOwnProperty('date')
     }
   }
 }

@@ -23,9 +23,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setSelectedMarker'
+      'setSelectedMarker',
+      'setPopupClicked'
     ]),
     setMarker () {
+      this.setPopupClicked(true)
       this.setSelectedMarker(this.lostItem)
       const itemID = this.lostItem.id
       const collectionType = this.lostItem.collection === 'lost' ? 'l' : 'f'

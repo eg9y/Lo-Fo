@@ -2,6 +2,7 @@
   <l-marker :lat-lng="foundItem.coordinates"
     :icon="icon"
     :ref="`f${foundItem.id}`"
+    :riseOnHover="true"
     @click="setMarker">
   </l-marker>
 </template>
