@@ -91,7 +91,6 @@
           </v-layout>
         </v-form>
       </v-container>
-      <br />
       <small>* indicates required field</small>
     </v-card-text>
     <v-card-actions>

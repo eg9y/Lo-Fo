@@ -20,9 +20,9 @@ import Panel from '@/components/Globals/Panel'
 delete L.Icon.Default.prototype._getIconUrl
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+  iconRetinaUrl: require('../static/png/map-marker.png'),
+  iconUrl: require('../static/png/map-marker.png'),
+  iconSize: [24, 24]
 })
 
 Vue.component('panel', Panel)
@@ -39,6 +39,10 @@ Vue.use(Vuetify, {
   theme: {
     primary: '#1C77C3',
     accent: '#39A9DB'
+  },
+  icons: {
+    next: 'icon-right-open',
+    prev: 'icon-left-open'
   }
 })
 

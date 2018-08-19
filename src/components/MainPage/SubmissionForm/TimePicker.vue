@@ -15,7 +15,7 @@
         v-model="picker"
         label="Time"
         persistent-hint
-        append-icon="event"
+        append-icon="icon-clock"
         readonly></v-text-field>
       <v-time-picker v-model="picker"></v-time-picker>
     </v-menu>

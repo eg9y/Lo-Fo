@@ -2,26 +2,29 @@
 
 <template>
   <v-menu v-model="displayMenu"
-          offset-y
-          :close-on-content-click="false">
+    offset-y
+    :close-on-content-click="false">
     <v-btn slot="activator"
-           flat>
-      <v-icon left>list</v-icon>
+      id="display-button"
+      flat>
+      <v-icon left>icon-th-list</v-icon>
       Display
     </v-btn>
     <v-list>
       <v-list-tile @click="displayLost">
-        <v-checkbox :label="`Lost Markers`"
-                    v-model="lost_checkbox"></v-checkbox>
+        <v-icon v-if="lostToggle">icon-check</v-icon>
+        <v-icon v-else>icon-check-empty</v-icon>
+        Lost Markers
       </v-list-tile>
       <v-list-tile @click="displayFound">
-        <v-checkbox :label="`Found Markers`"
-                    v-model="found_checkbox"></v-checkbox>
+        <v-icon v-if="foundToggle">icon-check</v-icon>
+        <v-icon v-else>icon-check-empty</v-icon>
+        Found Markers
       </v-list-tile>
       <v-list-tile>
         <v-btn block
-               to="/display"
-               @click="displayMenu=false">
+          to="/display"
+          @click="displayMenu=false">
           List View
         </v-btn>
       </v-list-tile>
@@ -30,15 +33,19 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   data () {
     return {
-      displayMenu: false,
-      lost_checkbox: true,
-      found_checkbox: true
+      displayMenu: false
     }
+  },
+  computed: {
+    ...mapGetters([
+      'lostToggle',
+      'foundToggle'
+    ])
   },
   methods: {
     ...mapMutations([
@@ -49,22 +56,27 @@ export default {
       Displays the lost markers if the lost_checkbox is checked
     */
     displayLost () {
-      if (this.lost_checkbox) {
-        this.setLostToggle(true)
-      } else {
+      if (this.lostToggle) {
         this.setLostToggle(false)
+      } else {
+        this.setLostToggle(true)
       }
     },
     /*
       Displays the found markers if the found_checkbox is checked
     */
     displayFound () {
-      if (this.found_checkbox) {
-        this.setFoundToggle(true)
-      } else {
+      if (this.foundToggle) {
         this.setFoundToggle(false)
+      } else {
+        this.setFoundToggle(true)
       }
     }
   }
 }
 </script>
+<style scoped>
+#display-button {
+  background-color: #006aad !important;
+}
+</style>

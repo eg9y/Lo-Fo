@@ -13,7 +13,8 @@
     </v-alert>
 
     <!-- Pop up dialog that includes the submission form -->
-    <submission-form :selectedLatLng="selectedLatLng"
+    <submission-form id="#submissionDialog"
+      :selectedLatLng="selectedLatLng"
       :submissionDialog="submissionDialog"
       :user="user"></submission-form>
 
@@ -42,7 +43,7 @@
       </v-marker-cluster>
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
-        :lat-lng="selectedLatLng"></l-marker>
+        :lat-lng="accurateLatLng"></l-marker>
 
     </l-map>
     <template v-else>
@@ -124,7 +125,10 @@ export default {
       'selectedMarker',
       'map',
       'popupClicked'
-    ])
+    ]),
+    accurateLatLng () {
+      return L.latLng(this.selectedLatLng.lat - 0.0006, this.selectedLatLng.lng + 0.00001)
+    }
   },
   methods: {
     ...mapActions([
@@ -142,13 +146,14 @@ export default {
       Parameters: e -- event object from clicking the map
     */
     addLocation (e) {
-      if (!this.isUserLoggedIn) {
-        this.alert = true
-        return
-      } else if (this.popupClicked) {
+      if (this.popupClicked) {
         this.setPopupClicked(false)
         this.setSelectedMarker(null)
         console.log('popup closed')
+        return
+      }
+      if (!this.isUserLoggedIn) {
+        this.alert = true
         return
       }
       console.log(L.popup().isOpen())
@@ -317,11 +322,12 @@ img {
   width: 100%;
   height: auto;
 }
-
+.leaflet-container {
+  cursor: url(../../../static/png/pin.png) 10 20, auto !important;
+}
 #mapDialogFirst {
   z-index: 0;
 }
-
 .button {
   background-color: rgb(126, 187, 109);
   border: none;

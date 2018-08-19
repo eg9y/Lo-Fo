@@ -26,7 +26,7 @@
         :key="lost_item.id"
         @click="center(lost_item, 'lost')">
         <v-list-tile-action>
-          <v-icon>sentiment_very_dissatisfied</v-icon>
+          <v-icon>icon-emo-unhappy</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{ lost_item.type}}</v-list-tile-title>
@@ -40,7 +40,7 @@
         :key="found_item.id"
         @click="center(found_item, 'found')">
         <v-list-tile-action>
-          <v-icon>sentiment_very_satisfied</v-icon>
+          <v-icon>icon-emo-beer</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{ found_item.type }}</v-list-tile-title>

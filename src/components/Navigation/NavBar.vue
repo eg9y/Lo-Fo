@@ -3,29 +3,35 @@
 <template>
   <div>
     <v-toolbar dark
-      color="primary"
       v-if="!stillLoading">
 
       <!-- Mobile View -->
       <template v-if="$vuetify.breakpoint.width < 710">
         <v-menu :nudge-width="100">
           <v-toolbar-title slot="activator">
-            <v-toolbar-side-icon></v-toolbar-side-icon>
+            <v-toolbar-side-icon to="/">
+              <v-icon>icon-home-1</v-icon>
+            </v-toolbar-side-icon>
           </v-toolbar-title>
           <v-list>
             <v-list-tile v-if="!this.isUserLoggedIn"
-              @click="auth">
+              @click="auth"
+              id="signin-button">
               <v-list-tile-title>
+                <v-icon>play_arrow</v-icon>
                 Sign In
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-else
-              @click="signOut">
+              @click="signOut"
+              id="signout-button">
               <v-list-tile-title>
-                Sign Out
+                <v-icon>eject</v-icon> Sign Out
               </v-list-tile-title>
             </v-list-tile>
             <v-list-tile v-if="this.isUserLoggedIn"
+              id="profile-button"
+              light
               to="/profile">
               <v-list-tile-title>
                 {{user.displayName}}
@@ -35,12 +41,12 @@
         </v-menu>
         <v-spacer></v-spacer>
         <v-toolbar-items>
-          <v-btn flat
+          <v-btn id="home-button"
             dark
             router
             to="/"
             class="">
-            <v-icon left>home</v-icon> Home
+            <v-icon left>icon-home-1</v-icon> Home
           </v-btn>
           <display-button v-if="mapStillLoading"></display-button>
         </v-toolbar-items>
@@ -48,17 +54,20 @@
 
       <!-- Desktop View -->
       <template v-if="$vuetify.breakpoint.width >= 710">
-        <v-toolbar-side-icon v-if="this.isUserLoggedIn"
-          @click.stop="drawer = !drawer">
+        <v-toolbar-side-icon to="/">
+          <v-icon>icon-home-1</v-icon>
         </v-toolbar-side-icon>
         <v-toolbar-title class="white--text">Lo-Fo</v-toolbar-title>
         <v-spacer></v-spacer>
 
         <!-- Home button -->
         <v-toolbar-items>
-          <v-btn to="/"
+          <v-btn id="home-button"
+            v-if="this.isUserLoggedIn"
+            @click.stop="drawer = !drawer"
             flat>
-            <v-icon left>home</v-icon> Home
+            <v-icon left>icon-box</v-icon>
+            My Items
           </v-btn>
           <display-button></display-button>
         </v-toolbar-items>
@@ -66,18 +75,23 @@
         <!-- Sign in/out buttons -->
         <v-toolbar-items v-if="!this.isUserLoggedIn">
           <v-btn @click="auth"
+            id="signin-button"
             flat>
+            <v-icon>icon-login</v-icon>
             Sign In
           </v-btn>
         </v-toolbar-items>
         <v-toolbar-items v-else>
           <v-btn @click="signOut"
+            id="signout-button"
             flat>
-            Sign Out
+            <v-icon>icon-logout</v-icon> Sign Out
           </v-btn>
-          <v-btn to="/profile"
+          <v-btn id="profile-button"
+            light
+            to="/profile"
             flat>
-            <v-icon left>face</v-icon> {{user.displayName}}
+            <v-icon left>icon-user</v-icon> {{user.displayName}}
           </v-btn>
         </v-toolbar-items>
       </template>
@@ -144,3 +158,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+#home-button {
+  background-color: #003c6c !important;
+}
+#signout-button {
+  background-color: #da216d !important;
+}
+#signin-button {
+  background-color: rgb(45, 189, 93) !important;
+}
+#profile-button {
+  background-color: #fdc700 !important;
+}
+</style>

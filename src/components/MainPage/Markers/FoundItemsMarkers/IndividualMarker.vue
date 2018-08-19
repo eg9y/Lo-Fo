@@ -37,8 +37,8 @@ export default {
   computed: {
     icon () {
       return L.icon({
-        iconUrl: 'https://firebasestorage.googleapis.com/v0/b/lost-and-found-ddb76.appspot.com/o/found_icon.png?alt=media&token=7b310ae5-11a2-4f74-b9fb-38bb123257d3',
-        iconSize: [32, 32],
+        iconUrl: 'https://firebasestorage.googleapis.com/v0/b/lost-and-found-ddb76.appspot.com/o/found_marker.png?alt=media&token=819906a9-f325-49d3-826f-2800588d8277',
+        iconSize: [24, 24],
         iconAnchor: [20, 20]
       })
     }

@@ -16,7 +16,7 @@
         label="Date"
         hint="MM/DD/YYYY format"
         persistent-hint
-        append-icon="event"
+        append-icon="icon-calendar-1"
         readonly></v-text-field>
       <v-date-picker v-model="date"
         no-title
