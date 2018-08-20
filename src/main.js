@@ -38,13 +38,14 @@ Vue.use(VueRouter)
 Vue.use(Vuetify, {
   theme: {
     primary: '#1C77C3',
-    accent: '#39A9DB',
-    box: '#B26D00',
-    display: '#AD6500'
+    accent: '#39A9DB'
   },
   icons: {
     next: 'icon-right-open',
-    prev: 'icon-left-open'
+    prev: 'icon-left-open',
+    dropdown: 'icon-down-dir',
+    checkboxOn: 'icon-check',
+    checkboxOff: 'icon-check-empty'
   }
 })
 

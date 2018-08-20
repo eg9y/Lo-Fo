@@ -115,12 +115,6 @@
       "src": "fontawesome"
     },
     {
-      "uid": "gjt8ba5q0n3nn8ptw6324sflr8qoaeam",
-      "css": "location",
-      "code": 59407,
-      "src": "typicons"
-    },
-    {
       "uid": "dpxunrtmigvk6jm0ieo7axfsgzx4awll",
       "css": "cog",
       "code": 59408,
@@ -131,6 +125,18 @@
       "css": "search",
       "code": 59409,
       "src": "typicons"
+    },
+    {
+      "uid": "8ax1xqcbzz1hobyd4i7f0unwib1bztip",
+      "css": "down-dir",
+      "code": 59410,
+      "src": "modernpics"
+    },
+    {
+      "uid": "3db5347bd219f3bce6025780f5d9ef45",
+      "css": "tag",
+      "code": 59411,
+      "src": "fontawesome"
     }
   ]
 }

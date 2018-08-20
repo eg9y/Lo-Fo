@@ -3,6 +3,9 @@
 <template>
   <div>
     <v-toolbar dark
+      app
+      fixed
+      clipped-left
       v-if="!stillLoading">
 
       <!-- Mobile View -->
@@ -56,23 +59,24 @@
 
       <!-- Desktop View -->
       <template v-if="$vuetify.breakpoint.width >= 710">
-        <v-toolbar-side-icon to="/">
-          <v-icon>icon-home-1</v-icon>
-        </v-toolbar-side-icon>
-        <v-toolbar-title class="white--text">Lo-Fo</v-toolbar-title>
+        <v-toolbar-title class="white--text">
+          <v-btn flat
+            to="/">
+            Lo-Fo
+          </v-btn>
+        </v-toolbar-title>
         <v-spacer></v-spacer>
 
         <!-- Home button -->
         <v-toolbar-items>
           <v-btn id="home-button"
-            v-if="this.isUserLoggedIn"
+            v-if="this.isUserLoggedIn && $route.name === 'Map'"
             @click.stop="drawer = !drawer"
             flat>
-            <v-icon left
-              color="box">icon-box</v-icon>
+            <v-icon left>icon-box</v-icon>
             My Items
           </v-btn>
-          <display-button></display-button>
+          <display-button v-if="$route.name !== 'Display'"></display-button>
         </v-toolbar-items>
 
         <!-- Sign in/out buttons -->

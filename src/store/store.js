@@ -16,7 +16,19 @@ const algolia = algoliasearch(
   process.env.ALGOLIA_APP_ID,
   process.env.ALGOLIA_API_KEY
 )
+
 const algoliaIndex = algolia.initIndex(process.env.ALGOLIA_INDEX_NAME)
+
+algoliaIndex.setSettings({
+  attributesToHighlight: [
+    'type',
+    'description',
+    'date',
+    'time',
+    'contactEmail'
+  ],
+  attributesForFaceting: ['type', 'description', 'date', 'time', 'contactEmail']
+})
 
 Vue.use(Vuex)
 
@@ -30,6 +42,8 @@ export default new Vuex.Store({
     allLostItems: null,
     allFoundItems: null,
     queriedItems: null,
+    nbHits: 0,
+    nbPages: 0,
     firebase,
     db,
     algoliaIndex,

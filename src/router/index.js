@@ -26,6 +26,7 @@ export default new Router({
     },
     {
       path: '/:id',
+      redirect: '/',
       props: true,
       component: LeafletMap
     }

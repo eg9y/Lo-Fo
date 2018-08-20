@@ -8,10 +8,6 @@ export const stillLoading = ({ stillLoading }) => stillLoading
 
 export const mapStillLoading = ({ mapStillLoading }) => mapStillLoading
 
-export const queriedLostItems = ({ queriedLostItems }) => queriedLostItems
-
-export const queriedFoundItems = ({ queriedFoundItems }) => queriedFoundItems
-
 export const lostToggle = ({ lostToggle }) => lostToggle
 
 export const foundToggle = ({ foundToggle }) => foundToggle
@@ -27,3 +23,7 @@ export const map = ({ map }) => map
 export const popupClicked = ({ popupClicked }) => popupClicked
 
 export const queriedItems = ({ queriedItems }) => queriedItems
+
+export const nbHits = ({ nbHits }) => nbHits
+
+export const nbPages = ({ nbPages }) => nbPages

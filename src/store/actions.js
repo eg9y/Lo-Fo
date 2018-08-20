@@ -88,27 +88,38 @@ export const signOut = function () {
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries based on query
   */
-export const updateCollectionQuery = function ({ commit }, query) {
-  this.state.algoliaIndex.search(
-    {
-      query,
-      attributesToRetrieve: [
-        'type',
-        'description',
-        'date',
-        'time',
-        'contactEmail',
-        'picture',
-        'coordinates',
-        'objectID'
-      ],
-      hitsPerPage: 20
-    },
-    function searchDone (err, content) {
-      if (err) {
-        return console.error(err)
-      }
-      commit('setQueriedItems', content.hits)
+export const updateCollectionQuery = function ({ commit }, queryAndPage) {
+  const { query, page, filters } = queryAndPage
+  const indexOptions = {
+    query,
+    page,
+    attributesToRetrieve: [
+      'type',
+      'description',
+      'date',
+      'time',
+      'contactEmail',
+      'picture',
+      'coordinates',
+      'objectID'
+    ],
+    hitsPerPage: 10
+  }
+  if (filters) {
+    indexOptions.filters = filters
+  }
+  this.state.algoliaIndex.search(indexOptions, function searchDone (
+    err,
+    content
+  ) {
+    if (err) {
+      return console.error(err)
     }
-  )
+    // console.log('content :', content)
+    commit('updateCollectionQuery', {
+      hits: content.hits,
+      nbPages: content.nbPages,
+      nbHits: content.nbHits
+    })
+  })
 }

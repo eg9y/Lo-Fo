@@ -33,33 +33,44 @@
             </v-card-media>
             <v-card-title primary-title>
               <h2 class="text-sm-left">
-                <strong>{{lostOrFound(submission.collection)}}</strong>{{submission.type}}</h2>
+                <strong>{{lostOrFound(submission.collection)}}</strong>
+                <span v-html="displayAttribute (submission, 'type')">
+                </span>
+              </h2>
             </v-card-title>
             <v-card-title>
               <div>
                 <div v-if="submission.description">
-                  <b>Description:</b> {{ submission.description }}<br/>
+                  <b>Description:</b>
+                  <span v-html="displayAttribute (submission, 'description')"></span>
+                  <br/>
                 </div>
                 <div v-else>
                   <b>Description:</b> N/A<br/>
                 </div>
                 <br/>
                 <div v-if="submission.contactEmail">
-                  <b>Contact:</b> {{ submission.contactEmail }}<br/>
+                  <b>Contact:</b>
+                  <span v-html="displayAttribute (submission, 'contactEmail')"></span>
+                  <br/>
                 </div>
                 <div v-else>
                   <b>Contact:</b> N/A<br/>
                 </div>
                 <br>
                 <div v-if="submission.date">
-                  <b>Date:</b> {{ submission.date }}<br/>
+                  <b>Date:</b>
+                  <span v-html="displayAttribute (submission, 'date')"></span>
+                  <br/>
                 </div>
                 <div v-else>
                   <b>Date:</b> N/A<br/>
                 </div>
                 <br>
                 <div v-if="submission.time">
-                  <b>Time:</b> {{ submission.time }}<br/>
+                  <b>Time:</b>
+                  <span v-html="displayAttribute (submission, 'time')"></span>
+                  <br/>
                 </div>
                 <div v-else>
                   <b>Time:</b> N/A<br/>
@@ -108,6 +119,11 @@ export default {
         return 'f'
       }
     },
+    displayAttribute (submission, attribute) {
+      return submission._highlightResult[attribute]
+        ? submission._highlightResult[attribute].value
+        : submission[attribute]
+    },
     /*
       Used in the Location button to redirect to the home page with the info window of the item open
     */
@@ -140,6 +156,9 @@ export default {
 </script>
 
 <style>
+em {
+  background-color: yellow;
+}
 .project-card {
   margin-right: 10px;
   padding: 0px;

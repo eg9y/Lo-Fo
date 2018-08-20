@@ -14,9 +14,10 @@
 .icon-right-open:before { content: '\e80c'; } /* '' */
 .icon-left-open:before { content: '\e80d'; } /* '' */
 .icon-pin:before { content: '\e80e'; } /* '' */
-.icon-location:before { content: '\e80f'; } /* '' */
 .icon-cog:before { content: '\e810'; } /* '' */
 .icon-search:before { content: '\e811'; } /* '' */
+.icon-down-dir:before { content: '\e812'; } /* '' */
+.icon-tag:before { content: '\e813'; } /* '' */
 .icon-login:before { content: '\f02c'; } /* '' */
 .icon-logout:before { content: '\f02d'; } /* '' */
 .icon-check-empty:before { content: '\f096'; } /* '' */

@@ -22,8 +22,10 @@ export const setAllFoundItems = function (state, items) {
     }) || items
 }
 
-export const setQueriedItems = function (state, items) {
-  state.queriedItems = items
+export const updateCollectionQuery = function (state, contentResult) {
+  state.queriedItems = contentResult.hits
+  state.nbHits = contentResult.nbHits
+  state.nbPages = contentResult.nbPages
 }
 
 // below four functions are for toggling lost/found pins

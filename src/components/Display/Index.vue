@@ -1,10 +1,14 @@
 <!-- This displays all the items in the database as a list view -->
 
 <template>
-  <div>
+  <v-container fluid
+    grid-list-md>
+    <search-filters></search-filters>
     <v-layout>
-      <v-flex xs12
+      <v-flex d-flex
+        xs12
         sm6
+        md6
         offset-sm3>
         <!-- Search bar to search submission by item type -->
         <search-panel></search-panel>
@@ -15,31 +19,59 @@
     <h1 v-if="!clusteredCollections">
       Loading...
     </h1>
-  </div>
+    <v-layout>
+      <div v-if="nbPages > 1"
+        class="text-xs-center">
+        <v-pagination v-model="page"
+          :length="nbPages"
+          prev-icon="icon-left-open"
+          next-icon="icon-right-open"></v-pagination>
+      </div>
+    </v-layout>
+    <div id="powered-by-algolia">
+      <p>Powered by</p>
+      <img src="../../../static/svg/algolia.svg"
+        width="24"
+        height="24"
+        alt="">
+    </div>
+  </v-container>
 </template>
 
 <script>
 import List from './List'
 import SearchPanel from './SearchPanel'
+import SearchFilters from './SearchFilters'
 import { mapGetters, mapActions } from 'vuex'
 
 // Creates a reference to firebase storag
 
 export default {
   components: {
-    'list': List,
-    'search-panel': SearchPanel
+    List,
+    SearchPanel,
+    SearchFilters
   },
   data () {
     return {
-      clusteredCollections: null
+      clusteredCollections: null,
+      page: 0,
+      filters: null
     }
   },
   computed: {
     ...mapGetters([
-      'queriedItems'
+      'queriedItems',
+      'nbHits',
+      'nbPages'
     ]),
-    breakpoint () { return this.$vuetify.breakpoint }
+    breakpoint () { return this.$vuetify.breakpoint },
+    pageZeroIndexed () {
+      if (this.page === 0) {
+        return 0
+      }
+      return this.page - 1
+    }
   },
   methods: {
     ...mapActions([
@@ -85,23 +117,32 @@ export default {
     '$route.query.search': {
       immediate: true,
       async handler (query) {
-        this.updateCollectionQuery(query)
-        if (query) {
-          this.updateCluster([this.queriedItems])
-        }
+        this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters: this.filters })
       }
     },
-
     queriedItems (collection) {
       this.updateCluster([...this.queriedItems])
+    },
+    page () {
+      const query = this.$route.query.search
+      this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters: this.filters })
+    },
+    filter () {
+      const query = this.$route.query.search
+      this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters: this.filters })
     }
   }
 }
 </script>
-
-<style>
+<style scoped>
+p {
+  display: inline-block;
+  font-weight: 600;
+}
 img {
-  width: 100%;
-  height: auto;
+  margin-top: 10px;
+}
+#powered-by-algolia {
+  text-align: center;
 }
 </style>

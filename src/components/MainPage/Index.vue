@@ -234,7 +234,7 @@ export default {
         container.innerHTML =
           `
           <h1 style="text-align: center;">${label} ${this.selectedMarker.type}</h1>
-          <img src="${this.selectedMarker.picture || ''}"/>
+          <img id="marker-picture" src="${this.selectedMarker.picture || ''}"/>
           <h3>${this.selectedMarker.description}</h3>
           <h3>${timestamp}</h3>
           <h3>${this.selectedMarker.contactEmail}</h3>
@@ -325,7 +325,7 @@ export default {
 </script>
 
 <style>
-img {
+#marker-picture {
   width: 100%;
   height: auto;
 }

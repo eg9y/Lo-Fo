@@ -7,17 +7,18 @@
     <v-btn slot="activator"
       id="display-button"
       flat>
-      <v-icon left
-        color="display">icon-th-list</v-icon>
+      <v-icon left>icon-th-list</v-icon>
       Display
     </v-btn>
     <v-list>
-      <v-list-tile @click="displayLost">
+      <v-list-tile v-if="$router.currentRoute.name === 'Map'"
+        @click="displayLost">
         <v-icon v-if="lostToggle">icon-check</v-icon>
         <v-icon v-else>icon-check-empty</v-icon>
         Lost Markers
       </v-list-tile>
-      <v-list-tile @click="displayFound">
+      <v-list-tile v-if="$router.currentRoute.name === 'Map'"
+        @click="displayFound">
         <v-icon v-if="foundToggle">icon-check</v-icon>
         <v-icon v-else>icon-check-empty</v-icon>
         Found Markers
