@@ -45,7 +45,10 @@ Vue.use(Vuetify, {
     prev: 'icon-left-open',
     dropdown: 'icon-down-dir',
     checkboxOn: 'icon-check',
-    checkboxOff: 'icon-check-empty'
+    checkboxOff: 'icon-check-empty',
+    radioOn: 'icon-check',
+    radioOff: 'icon-check-empty',
+    clear: 'icon-cancel'
   }
 })
 

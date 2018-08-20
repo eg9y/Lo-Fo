@@ -25,12 +25,14 @@
       :zoom="zoom"
       :minZoom="15"
       :maxZoom="18"
-      :center="center"
       :max-bounds="maxBounds"
+      :center="center"
       @click="addLocation"
       ref="map">
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
+        :tileLayerClass="tileLayerClass"
+        :options="{boundary}"
         :attribution="attribution"></l-tile-layer>
       <v-marker-cluster :options="clusterOptions"
         ref="cluster">
@@ -66,6 +68,8 @@ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import 'leaflet/dist/leaflet.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import '../../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css'
+
+import './BoundaryCanvas.js'
 
 // Configure algolia for search functionality
 import algoliasearch from 'algoliasearch'
@@ -103,7 +107,26 @@ export default {
       found_items: [],
       triggerPopFound: null,
       alert: false,
-      clusterOptions: {}
+      clusterOptions: {},
+      boundary: {
+        'type': 'Polygon',
+        'coordinates': [
+          [
+            // [-122.045590, 37.005817],
+            // [-122.044246, 36.977648],
+            // [-122.073094, 36.979113],
+            // [-122.073802, 37.004475]
+
+            [-122.07372665405273, 37.004448819299], // top-right
+            [-122.07372665405273, 36.97622678464096], // bottom-right
+            [-122.04299926757812, 36.97622678464096], // bottom-left
+            [-122.04299926757812, 37.004448819299] // top-left
+
+          ]
+        ]
+
+      },
+      tileLayerClass: L.TileLayer.boundaryCanvas
     }
   },
   computed: {

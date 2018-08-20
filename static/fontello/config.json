@@ -137,6 +137,12 @@
       "css": "tag",
       "code": 59411,
       "src": "fontawesome"
+    },
+    {
+      "uid": "1dq4tek4k8ea7zlj4kc3w83itnutaxg5",
+      "css": "cancel",
+      "code": 59407,
+      "src": "typicons"
     }
   ]
 }
