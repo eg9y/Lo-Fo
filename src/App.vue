@@ -98,13 +98,13 @@ export default {
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  background: #f7f7f7;
-  background: -moz-linear-gradient(top, #f7f7f7 0%, #e2e2e2 100%);
+  background: #dddddd;
+  /* background: -moz-linear-gradient(top, #f7f7f7 0%, #e2e2e2 100%);
   background: -webkit-linear-gradient(top, #f7f7f7 0%, #e2e2e2 100%);
   background: linear-gradient(to bottom, #f7f7f7 0%, #e2e2e2 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e2e2e2',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e2e2e2',GradientType=0 ); */
 }
-body {
+/* body {
   background-color: rgb(247, 244, 244);
-}
+} */
 </style>

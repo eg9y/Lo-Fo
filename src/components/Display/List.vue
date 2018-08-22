@@ -14,32 +14,47 @@
         :xs6="$vuetify.breakpoint.width < 612"
         :xs12="$vuetify.breakpoint.width < 500">
         <v-layout column>
-          <v-card :class="{'project-card':index !== cluster.length-1}">
+          <v-card :class="{'project-card':index !== cluster.length-1}"
+            id="cardBackground">
             <v-card-media height="200px"
+              class="card-image"
+              contain
               :id="submission.id"
               v-if="submission.picture"
               :src="submission.picture"
               alt="NO IMAGE UPLOADED">
             </v-card-media>
             <v-card-media height="200px"
+              class="card-image"
+              contain
               :id="submission.id"
+              light
               v-else-if="submission.collection === 'lost'"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/768px-Icon-round-Question_mark.svg.png">
+              src="../../../static/png/question-mark.png">
             </v-card-media>
             <v-card-media height="200px"
+              class="card-image"
+              contain
               :id="submission.id"
+              light
               v-else
-              src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Exclamation_mark.png">
+              src="../../../static/png/exclamation-mark.png">
             </v-card-media>
-            <v-card-title primary-title>
+            <v-card-title primary-title
+              class="details">
               <h2 class="text-sm-left">
                 <strong>{{lostOrFound(submission.collection)}}</strong>
                 <span v-html="displayAttribute (submission, 'type')">
                 </span>
               </h2>
             </v-card-title>
-            <v-card-title>
+            <v-card-title class="details">
               <div>
+                <div v-if="submission.category">
+                  <b>Category:</b>
+                  <span v-html="displayAttribute (submission, 'category')"></span>
+                  <br/>
+                </div>
                 <div v-if="submission.description">
                   <b>Description:</b>
                   <span v-html="displayAttribute (submission, 'description')"></span>
@@ -69,7 +84,7 @@
                 <br>
                 <div v-if="submission.time">
                   <b>Time:</b>
-                  <span v-html="displayAttribute (submission, 'time')"></span>
+                  <span v-html="displayTime (submission)"></span>
                   <br/>
                 </div>
                 <div v-else>
@@ -77,13 +92,11 @@
                 </div>
               </div>
             </v-card-title>
-            <v-card-actions>
-              <!-- <v-btn bottom flat color="cyan">Contact</v-btn> -->
-              <v-btn bottom
-                flat
-                color="cyan"
-                @click="locateItem(submission)">Location</v-btn>
-            </v-card-actions>
+            <!-- <v-btn bottom flat color="cyan">Contact</v-btn> -->
+            <v-btn bottom
+              flat
+              color="cyan"
+              @click="locateItem(submission)">Location</v-btn>
             <br/>
           </v-card>
         </v-layout>
@@ -124,6 +137,19 @@ export default {
         ? submission._highlightResult[attribute].value
         : submission[attribute]
     },
+    displayTime (submission) {
+      let correctObject = null
+      let equalPos = 1
+      if (submission.time.toString().length === 4) {
+        equalPos = 2
+      }
+      if (submission._highlightResult.time) {
+        correctObject = submission._highlightResult.time.value
+      } else {
+        correctObject = submission.time
+      }
+      return correctObject.toString().slice(0, equalPos) + ':' + correctObject.toString().slice(equalPos)
+    },
     /*
       Used in the Location button to redirect to the home page with the info window of the item open
     */
@@ -158,6 +184,7 @@ export default {
 <style>
 em {
   background-color: yellow;
+  color: black;
 }
 .project-card {
   margin-right: 10px;
@@ -171,5 +198,14 @@ em {
 .small-info {
   font-size: 0.8em;
   overflow: hidden;
+}
+.details {
+  color: white;
+}
+#cardBackground {
+  background-color: #003c6c;
+}
+.card-image {
+  margin-top: 2vh;
 }
 </style>

@@ -25,9 +25,17 @@ algoliaIndex.setSettings({
     'description',
     'date',
     'time',
-    'contactEmail'
+    'contactEmail',
+    'category'
   ],
-  attributesForFaceting: ['type', 'description', 'date', 'time', 'contactEmail']
+  attributesForFaceting: [
+    'type',
+    'description',
+    'date',
+    'time',
+    'contactEmail',
+    'category'
+  ]
 })
 
 Vue.use(Vuex)
@@ -51,11 +59,14 @@ export default new Vuex.Store({
     // if lostToggle/foundToggle is false = hide lost/found markers
     lostToggle: true,
     foundToggle: true,
-    center: L.latLng([36.991326, -122.058761]),
+    center: L.latLng([36.99015, -122.052362961]),
     zoom: 15,
     selectedMarker: null,
     map: null,
-    popupClicked: false
+    popupClicked: false,
+    queryDate: null,
+    queryCategory: null,
+    queryTime: null
   },
   getters,
   mutations,

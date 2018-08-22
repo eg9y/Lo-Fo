@@ -1,20 +1,32 @@
 <template>
-  <v-text-field prepend-icon="icon-search"
-    hide-details
-    single-line
-    clearable
-    label="Search by type, description, contact, time"
-    @keyup="searchQuery"
-    v-model="search">
-  </v-text-field>
+  <div>
+    <v-text-field prepend-icon="icon-search"
+      hide-details
+      single-line
+      clearable
+      label="Search by type, description, contact, time"
+      @keyup="searchQuery"
+      v-model="search">
+    </v-text-field>
+    <p>
+      <i>{{ nbHits }} results found</i>
+    </p>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
       search: ''
     }
+  },
+  computed: {
+    ...mapGetters([
+      'nbHits'
+    ])
   },
   watch: {
     '$route.query.search': {
@@ -88,4 +100,7 @@ export default {
 </script>
 
 <style>
+p {
+  color: grey;
+}
 </style>

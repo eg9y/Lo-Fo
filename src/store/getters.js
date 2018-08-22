@@ -27,3 +27,11 @@ export const queriedItems = ({ queriedItems }) => queriedItems
 export const nbHits = ({ nbHits }) => nbHits
 
 export const nbPages = ({ nbPages }) => nbPages
+
+export const categories = ({ categories }) => categories
+
+export const queryDate = ({ queryDate }) => queryDate
+
+export const queryCategory = ({ queryCategory }) => queryCategory
+
+export const queryTime = ({ queryTime }) => queryTime

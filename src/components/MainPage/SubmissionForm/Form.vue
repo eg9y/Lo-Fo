@@ -30,6 +30,11 @@
                 @blur="$v.description.$touch()"></v-textarea>
             </v-flex>
             <v-flex xs12>
+              <v-select :items="categories"
+                v-model="category"
+                label="Category"></v-select>
+            </v-flex>
+            <v-flex xs12>
               <v-text-field v-model="contactEmail"
                 label="Contact Information *"
                 :hint="contactHint"
@@ -155,6 +160,7 @@ export default {
       time: null,
       imageFile: null,
       imageURL: null,
+      category: null,
       active: null,
       valid: true
     }
@@ -202,7 +208,6 @@ export default {
       const errors = []
       if (!this.$v.contactEmail.$dirty) return errors
       !this.$v.contactEmail.email && errors.push('Must be valid e-mail')
-      !this.$v.contactEmail.required && errors.push('E-mail is required')
       return errors
     }
   },
@@ -234,6 +239,7 @@ export default {
       this.db.collection(collectionName).add({
         type: this.type,
         description: this.description,
+        category: this.category,
         contactEmail: this.contactEmail,
         coordinates: {
           lat: this.selectedLatLng.lat,
@@ -247,14 +253,15 @@ export default {
         collection
       }).then((docRef) => {
         docRef.get().then((doc) => {
-          index.addObject({
+          const objectToAdd = {
             ...doc.data(),
             objectID: doc.id
-          }, function (err, content) {
+          }
+          objectToAdd.time = parseInt(objectToAdd.time.replace(':', ''))
+          index.addObject(objectToAdd, function (err, content) {
             if (err) {
               return console.log(err)
             }
-            console.log('objectID=' + content.objectID)
           })
           this.$store.dispatch('updateUserCollection', collectionName)
           this.$store.dispatch('updateCollection', collectionName)

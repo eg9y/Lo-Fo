@@ -97,8 +97,10 @@ export default {
       marker: L.latLng(36.994635, -122.058842),
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      bounds: L.latLngBounds([[36.972855, -122.085947], [37.009252, -122.036793]]),
-      maxBounds: L.latLngBounds([[36.972855, -122.085947], [37.009252, -122.036793]]),
+      maxBounds: L.latLngBounds([
+        [37.018, -122.112], // top-left
+        [36.96, -122.02] // bottom-right
+      ]),
       // lat and lng are used for location
       selectedLatLng: null,
       submissionDialog: false,
@@ -112,16 +114,11 @@ export default {
         'type': 'Polygon',
         'coordinates': [
           [
-            // [-122.045590, 37.005817],
-            // [-122.044246, 36.977648],
-            // [-122.073094, 36.979113],
-            // [-122.073802, 37.004475]
-
+            // long lat
             [-122.07372665405273, 37.004448819299], // top-right
             [-122.07372665405273, 36.97622678464096], // bottom-right
             [-122.04299926757812, 36.97622678464096], // bottom-left
             [-122.04299926757812, 37.004448819299] // top-left
-
           ]
         ]
 

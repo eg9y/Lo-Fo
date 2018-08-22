@@ -19,14 +19,16 @@
     <h1 v-if="!clusteredCollections">
       Loading...
     </h1>
-    <v-layout>
-      <div v-if="nbPages > 1"
-        class="text-xs-center">
-        <v-pagination v-model="page"
-          :length="nbPages"
-          prev-icon="icon-left-open"
-          next-icon="icon-right-open"></v-pagination>
-      </div>
+    <v-layout mt-4>
+      <v-flex xs12>
+        <div v-if="nbPages > 1"
+          class="text-xs-center">
+          <v-pagination v-model="page"
+            :length="nbPages"
+            prev-icon="icon-left-open"
+            next-icon="icon-right-open"></v-pagination>
+        </div>
+      </v-flex>
     </v-layout>
     <div id="powered-by-algolia">
       <p>Powered by</p>
@@ -41,7 +43,7 @@
 <script>
 import List from './List'
 import SearchPanel from './SearchPanel'
-import SearchFilters from './SearchFilters'
+import SearchFilters from './SearchFilters/Index'
 import { mapGetters, mapActions } from 'vuex'
 
 // Creates a reference to firebase storag
@@ -56,14 +58,16 @@ export default {
     return {
       clusteredCollections: null,
       page: 0,
-      filters: null
+      filtersObject: {}
     }
   },
   computed: {
     ...mapGetters([
       'queriedItems',
-      'nbHits',
-      'nbPages'
+      'nbPages',
+      'queryDate',
+      'queryCategory',
+      'queryTime'
     ]),
     breakpoint () { return this.$vuetify.breakpoint },
     pageZeroIndexed () {
@@ -71,6 +75,28 @@ export default {
         return 0
       }
       return this.page - 1
+    },
+    filters () {
+      let computedFilters = ''
+      const keys = Object.keys(this.filtersObject)
+      for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+        let propertyName = keys[keyIndex]
+        if (computedFilters.length > 0) {
+          computedFilters += ' AND '
+        }
+        if (propertyName === 'time') {
+          const startTime = parseInt(this.filtersObject.time.timeStart)
+          const endTime = parseInt(this.filtersObject.time.timeEnd)
+          if (startTime > endTime) {
+            computedFilters += `time: ${endTime} TO ${startTime}`
+          } else {
+            computedFilters += `time: ${startTime} TO ${endTime}`
+          }
+        } else {
+          computedFilters += `${propertyName}:${this.filtersObject[propertyName]}`
+        }
+      }
+      return computedFilters
     }
   },
   methods: {
@@ -127,9 +153,23 @@ export default {
       const query = this.$route.query.search
       this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters: this.filters })
     },
-    filter () {
+    queryDate (queryDate) {
+      this.$set(this.filtersObject, 'date', queryDate)
+    },
+    queryCategory (queryCategory) {
+      if (!queryCategory && this.filtersObject.hasOwnProperty('category')) {
+        console.log('hi')
+        this.$delete(this.filtersObject, 'category')
+        return
+      }
+      this.$set(this.filtersObject, 'category', `"${queryCategory}"`)
+    },
+    queryTime (queryTime) {
+      this.$set(this.filtersObject, 'time', queryTime)
+    },
+    filters (filters) {
       const query = this.$route.query.search
-      this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters: this.filters })
+      this.updateCollectionQuery({ query, page: this.pageZeroIndexed, filters })
     }
   }
 }

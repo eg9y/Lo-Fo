@@ -17,6 +17,8 @@ import 'vuetify/dist/vuetify.min.css'
 // Import global component Panel ('window' component)
 import Panel from '@/components/Globals/Panel'
 
+import categories from './categories'
+
 delete L.Icon.Default.prototype._getIconUrl
 
 L.Icon.Default.mergeOptions({
@@ -53,6 +55,8 @@ Vue.use(Vuetify, {
 })
 
 Vue.use(VueProgressiveImage)
+
+Vue.prototype.categories = categories
 
 // Development mode
 Vue.config.productionTip = false

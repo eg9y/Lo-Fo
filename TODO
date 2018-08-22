@@ -1,0 +1,22 @@
+
+Todo:
+  ☐ Finish Filter
+    ✔ Date @started(18-08-21 12:17) @done(18-08-21 13:54) @lasted(1h37m7s)
+    ✔ Color @done(18-08-21 14:06)
+    ☐ Categories @started(18-08-21 14:06)
+    ☐ Time
+  ☐ Revamp Organization
+    ☐ Display -> List Display
+    ☐ Display -> remove Lost/Found filter
+    ☐ Put side bar (display by default, but toggleable) to list all items
+      ☐ Only show title and compressed picture
+      ☐ Locate and Details button
+      ☐ filter my items, lost items, found items
+  ☐ Connect with FB
+  ☐ Individual page
+    ☐ Details will show type, description, color, basically everything
+    ☐ Have tiny links
+    ☐ Share button for fb
+    ☐ Main purpose is for fb users to easily include the link when they lost/found something
+  ☐ Chat function/ encrypted email
+    ☐ Implement mailparser

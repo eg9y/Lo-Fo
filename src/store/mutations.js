@@ -64,3 +64,15 @@ export const setMap = function (state, map) {
 export const setPopupClicked = function (state, popupStatus) {
   state.popupClicked = popupStatus
 }
+
+export const setQueryDate = function (state, queryDate) {
+  state.queryDate = queryDate
+}
+
+export const setQueryCategory = function (state, queryCategory) {
+  state.queryCategory = queryCategory
+}
+
+export const setQueryTime = function (state, queryTime) {
+  state.queryTime = queryTime
+}

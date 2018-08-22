@@ -48,6 +48,18 @@ export const setPopupClicked = function ({ commit }, popupStatus) {
   commit('setPopupClicked', popupStatus)
 }
 
+export const setQueryDate = function ({ commit }, queryDate) {
+  commit('setQueryDate', queryDate)
+}
+
+export const setQueryCategory = function ({ commit }, queryCategory) {
+  commit('setQueryCategory', queryCategory)
+}
+
+export const setQueryTime = function ({ commit }, queryTime) {
+  commit('setQueryTime', queryTime)
+}
+
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
   */
@@ -101,9 +113,10 @@ export const updateCollectionQuery = function ({ commit }, queryAndPage) {
       'contactEmail',
       'picture',
       'coordinates',
-      'objectID'
+      'objectID',
+      'category'
     ],
-    hitsPerPage: 10
+    hitsPerPage: 12
   }
   if (filters) {
     indexOptions.filters = filters
