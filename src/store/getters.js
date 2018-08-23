@@ -1,9 +1,5 @@
 export const firebase = ({ firebase }) => firebase
 
-export const allLostItems = ({ allLostItems }) => allLostItems
-
-export const allFoundItems = ({ allFoundItems }) => allFoundItems
-
 export const stillLoading = ({ stillLoading }) => stillLoading
 
 export const mapStillLoading = ({ mapStillLoading }) => mapStillLoading
@@ -35,3 +31,8 @@ export const queryDate = ({ queryDate }) => queryDate
 export const queryCategory = ({ queryCategory }) => queryCategory
 
 export const queryTime = ({ queryTime }) => queryTime
+
+export const queryStatus = ({ queryStatus }) => queryStatus
+
+export const queriedFirestoreItems = ({ queriedFirestoreItems }) =>
+  queriedFirestoreItems

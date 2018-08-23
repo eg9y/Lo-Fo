@@ -1,3 +1,5 @@
+import router from '../router/index'
+
 export const stillLoading = function (state, loadingStatus) {
   state.stillLoading = loadingStatus
 }
@@ -6,20 +8,29 @@ export const toggleMapStillLoading = function (state, loadingStatus) {
   state.mapStillLoading = loadingStatus
 }
 
-export const setAllLostItems = function (state, items) {
-  state.allLostItems =
+export const setQueriedFirestoreItems = function (state, items) {
+  state.queriedFirestoreItems =
     items.map(item => {
       item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
       return item
     }) || items
 }
 
-export const setAllFoundItems = function (state, items) {
-  state.allFoundItems =
-    items.map(item => {
-      item.coordinates = L.latLng(item.coordinates.lat, item.coordinates.lng)
-      return item
-    }) || items
+export const setPage = function (state, newPage) {
+  if (!newPage) {
+    return state.page.pop()
+  }
+  state.page.push(newPage)
+}
+
+export const focus = function (state, submission) {
+  state.zoom = 20
+  state.selectedMarker = submission
+  state.center = L.latLng([
+    submission.coordinates.lat,
+    submission.coordinates.lng
+  ])
+  router.push('/')
 }
 
 export const updateCollectionQuery = function (state, contentResult) {
@@ -75,4 +86,8 @@ export const setQueryCategory = function (state, queryCategory) {
 
 export const setQueryTime = function (state, queryTime) {
   state.queryTime = queryTime
+}
+
+export const setQueryStatus = function (state, queryStatus) {
+  state.queryStatus = queryStatus
 }

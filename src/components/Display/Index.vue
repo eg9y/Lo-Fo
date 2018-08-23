@@ -32,10 +32,14 @@
     </v-layout>
     <div id="powered-by-algolia">
       <p>Powered by</p>
-      <img src="../../../static/svg/algolia.svg"
-        width="24"
-        height="24"
-        alt="">
+      <a href='https://www.algolia.com/'
+        target="_blank"
+        rel="noopener noreferrer">
+        <img src="../../../static/svg/algolia.svg"
+          width="24"
+          height="24"
+          alt="">
+      </a>
     </div>
   </v-container>
 </template>
@@ -57,7 +61,7 @@ export default {
   data () {
     return {
       clusteredCollections: null,
-      page: 0,
+      page: 1,
       filtersObject: {}
     }
   },
@@ -67,13 +71,11 @@ export default {
       'nbPages',
       'queryDate',
       'queryCategory',
-      'queryTime'
+      'queryTime',
+      'queryStatus'
     ]),
     breakpoint () { return this.$vuetify.breakpoint },
     pageZeroIndexed () {
-      if (this.page === 0) {
-        return 0
-      }
       return this.page - 1
     },
     filters () {
@@ -92,6 +94,19 @@ export default {
           } else {
             computedFilters += `time: ${startTime} TO ${endTime}`
           }
+        } else if (propertyName === 'collection') {
+          let status = '('
+          if (this.filtersObject.collection.lost) {
+            status = 'collection: lost'
+          }
+          if (this.filtersObject.collection.found) {
+            if (status.length > 1) {
+              status += 'OR collection: found)'
+            } else {
+              status += 'collection: found)'
+            }
+          }
+          computedFilters += status
         } else {
           computedFilters += `${propertyName}:${this.filtersObject[propertyName]}`
         }
@@ -158,7 +173,6 @@ export default {
     },
     queryCategory (queryCategory) {
       if (!queryCategory && this.filtersObject.hasOwnProperty('category')) {
-        console.log('hi')
         this.$delete(this.filtersObject, 'category')
         return
       }
@@ -166,6 +180,13 @@ export default {
     },
     queryTime (queryTime) {
       this.$set(this.filtersObject, 'time', queryTime)
+    },
+    queryStatus (queryStatus) {
+      if (queryStatus.found && queryStatus.lost) {
+        this.$delete(this.filtersObject, 'collection')
+        return
+      }
+      this.$set(this.filtersObject, 'collection', queryStatus)
     },
     filters (filters) {
       const query = this.$route.query.search

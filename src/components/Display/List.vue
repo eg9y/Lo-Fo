@@ -97,6 +97,10 @@
               flat
               color="cyan"
               @click="locateItem(submission)">Location</v-btn>
+
+            <v-btn bottom
+              flat
+              color="cyan lighten-2">Email</v-btn>
             <br/>
           </v-card>
         </v-layout>
@@ -106,7 +110,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   props: ['collectionCluster'],
@@ -124,6 +128,9 @@ export default {
       'setSelectedMarker',
       'setZoom',
       'setCenter'
+    ]),
+    ...mapMutations([
+      'focus'
     ]),
     collectionCode (value) {
       if (value === 'lost') {
@@ -157,12 +164,7 @@ export default {
       if (!submission) {
         return
       }
-      const itemID = submission.id || submission.objectID
-      const collectionType = this.collectionCode(submission.collection)
-      this.setSelectedMarker(submission)
-      this.setZoom(20)
-      this.setCenter(L.latLng([submission.coordinates.lat, submission.coordinates.lng]))
-      this.$router.push(`/${collectionType}-${itemID}`)
+      this.focus(submission)
     },
     lostOrFound (collection) {
       if (collection === 'lost') {

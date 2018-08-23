@@ -12,6 +12,8 @@
       You must log in to pin!
     </v-alert>
 
+    <side-nav></side-nav>
+
     <!-- Pop up dialog that includes the submission form -->
     <submission-form id="#submissionDialog"
       :selectedLatLng="selectedLatLng"
@@ -32,16 +34,13 @@
       <!-- attribution to OpenStreetMap -->
       <l-tile-layer :url="url"
         :tileLayerClass="tileLayerClass"
-        :options="{boundary}"
+        :options="{boundary: $options.boundary}"
         :attribution="attribution"></l-tile-layer>
       <v-marker-cluster :options="clusterOptions"
         ref="cluster">
 
         <!-- found items markers -->
-        <found-items-markers v-if="foundToggle"></found-items-markers>
-
-        <!-- lost items markers -->
-        <lost-items-markers v-if="lostToggle"></lost-items-markers>
+        <ItemsMarkers></ItemsMarkers>
       </v-marker-cluster>
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
@@ -56,8 +55,9 @@
 
 <script>
 import SubmissionForm from './SubmissionForm/Index'
-import FoundItemsMarkers from './Markers/FoundItemsMarkers/Index'
-import LostItemsMarkers from './Markers/LostItemsMarkers/Index'
+import ItemsMarkers from './Markers/Index'
+import SideNav from './SideNav/Index'
+
 import { EventBus } from '../../main'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -80,11 +80,29 @@ const algolia = algoliasearch(
 )
 const index = algolia.initIndex(process.env.ALGOLIA_INDEX_NAME)
 
+const MAXLAT = 37.004448819299
+const MINLAT = 36.97622678464096
+const MAXLNG = -122.04299926757812
+const MINLNG = -122.07372665405273
+
 export default {
+  boundary: {
+    'type': 'Polygon',
+    'coordinates': [
+      [
+        // long lat
+        [MINLNG, MAXLAT], // top-right
+        [MINLNG, MINLAT], // bottom-right
+        [MAXLNG, MINLAT], // bottom-left
+        [MAXLNG, MAXLAT] // top-left
+      ]
+    ]
+
+  },
   components: {
     SubmissionForm,
-    FoundItemsMarkers,
-    LostItemsMarkers,
+    ItemsMarkers,
+    SideNav,
     LMap,
     LTileLayer,
     LMarker,
@@ -98,7 +116,7 @@ export default {
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       maxBounds: L.latLngBounds([
-        [37.018, -122.112], // top-left
+        [37.018, -122.1], // top-left
         [36.96, -122.02] // bottom-right
       ]),
       // lat and lng are used for location
@@ -110,19 +128,6 @@ export default {
       triggerPopFound: null,
       alert: false,
       clusterOptions: {},
-      boundary: {
-        'type': 'Polygon',
-        'coordinates': [
-          [
-            // long lat
-            [-122.07372665405273, 37.004448819299], // top-right
-            [-122.07372665405273, 36.97622678464096], // bottom-right
-            [-122.04299926757812, 36.97622678464096], // bottom-left
-            [-122.04299926757812, 37.004448819299] // top-left
-          ]
-        ]
-
-      },
       tileLayerClass: L.TileLayer.boundaryCanvas
     }
   },
@@ -136,10 +141,7 @@ export default {
       'user',
       'stillLoading',
       'mapStillLoading',
-      'allLostItems',
-      'allFoundItems',
-      'lostToggle',
-      'foundToggle',
+      'queriedFirestoreItems',
       'center',
       'zoom',
       'selectedMarker',
@@ -154,7 +156,6 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateUserCollection',
       'updateCollection',
       'toggleCluster',
       'setZoomEnd',
@@ -176,6 +177,11 @@ export default {
       }
       if (!this.isUserLoggedIn) {
         this.alert = true
+        return
+      }
+      const withinLat = e.latlng.lat >= 36.97622678464096 && e.latlng.lat <= 37.004448819299
+      const withinLng = e.latlng.lng >= -122.07372665405273 && e.latlng.lng <= -122.04299926757812
+      if (!withinLat || !withinLng) {
         return
       }
       this.selectedLatLng = e.latlng
@@ -204,7 +210,6 @@ export default {
 
       // deletes the entry from the db and then updates the local copies
       this.db.collection(collectionName).doc(id).delete().then(() => {
-        this.updateUserCollection(collectionName)
         this.updateCollection(collectionName)
         console.log('Document successfully deleted!')
         L.popup()
@@ -232,15 +237,10 @@ export default {
       and x is 'l' for items in the lost collection and 'f' for items in the found collection
     */
     setPopup (param) {
-      if (!this.selectedMarker && this.allLostItems && this.allFoundItems && param) {
+      if (!this.selectedMarker && this.queriedFirestoreItems && param) {
         const itemID = param.substr(2)
-        this.allLostItems.forEach(item => {
-          if (item.id === itemID) {
-            this.setSelectedMarker(item)
-          }
-        })
         if (!this.selectedMarker) {
-          this.allFoundItems.forEach(item => {
+          this.queriedFirestoreItems.forEach(item => {
             if (item.id === itemID) {
               this.setSelectedMarker(item)
             }
@@ -260,7 +260,7 @@ export default {
           <h3>${this.selectedMarker.contactEmail}</h3>
           `
 
-        if (this.isUserLoggedIn && this.user.uid === this.selectedMarker.userID) {
+        if (this.user.uid === this.selectedMarker.userID) {
           this.createButton('Resolve', container)
         }
         L.popup()
@@ -277,12 +277,7 @@ export default {
     }
   },
   watch: {
-    allLostItems () {
-      if (this.$route.params.id) {
-        this.setPopup(this.$route.params.id)
-      }
-    },
-    allFoundItems () {
+    queriedFirestoreItems () {
       if (this.$route.params.id) {
         this.setPopup(this.$route.params.id)
       }
@@ -311,6 +306,7 @@ export default {
         this.lng = null
       }
       this.submissionDialog = false
+      this.selectedLatLng = null
     })
   },
   /*
@@ -346,6 +342,7 @@ export default {
 
 <style>
 #marker-picture {
+  max-width: 150px;
   width: 100%;
   height: auto;
 }

@@ -12,6 +12,21 @@
       <!-- Time -->
       <time-picker></time-picker>
 
+      <v-layout mt-2>
+        <v-list-tile>
+          <v-flex sm-6>
+            <v-checkbox label="Lost"
+              :disabled="!found"
+              v-model="lost"></v-checkbox>
+          </v-flex>
+          <v-flex sm-6>
+            <v-checkbox label="Found"
+              :disabled="!lost"
+              v-model="found"></v-checkbox>
+          </v-flex>
+        </v-list-tile>
+      </v-layout>
+
       <!-- Categories -->
       <search-category></search-category>
     </v-list>
@@ -19,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import TimePicker from './TimePicker'
 import DatePicker from './DatePicker'
 import SearchCategory from './SearchCategory'
@@ -32,12 +47,30 @@ export default {
   },
   data () {
     return {
+      lost: true,
+      found: true
     }
+  },
+  methods: {
+    ...mapActions([
+      'setQueryStatus'
+    ])
   },
   computed: {
     ...mapGetters([
       'stillLoading'
-    ])
+    ]),
+    status () {
+      return {
+        lost: this.lost,
+        found: this.found
+      }
+    }
+  },
+  watch: {
+    status (status) {
+      this.setQueryStatus(status)
+    }
   }
 }
 </script>

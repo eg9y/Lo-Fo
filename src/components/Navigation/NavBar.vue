@@ -4,6 +4,7 @@
   <div>
     <v-toolbar dark
       app
+      dense
       fixed
       clipped-left
       v-if="!stillLoading">
@@ -52,31 +53,37 @@
           </v-list>
         </v-menu>
         <v-spacer></v-spacer>
-        <v-toolbar-items>
-          <display-button v-if="mapStillLoading"></display-button>
+        <v-toolbar-items v-if="$route.name !== 'Display'">
+          <v-btn slot="activator"
+            id="display-button"
+            to="/display"
+            flat>
+            <v-icon left>icon-th-list</v-icon>
+            Display
+          </v-btn>
         </v-toolbar-items>
       </template>
 
       <!-- Desktop View -->
       <template v-if="$vuetify.breakpoint.width >= 710">
-        <v-toolbar-title class="white--text">
-          <v-btn flat
-            to="/">
+        <v-toolbar-side-icon>
+          <v-icon>icon-cog</v-icon>
+        </v-toolbar-side-icon>
+        <v-toolbar-title>
+          <v-btn to="/">
             Lo-Fo
           </v-btn>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <!-- Home button -->
-        <v-toolbar-items>
-          <v-btn id="home-button"
-            v-if="this.isUserLoggedIn && $route.name === 'Map'"
-            @click.stop="drawer = !drawer"
+        <v-toolbar-items v-if="$route.name !== 'Display'">
+          <v-btn slot="activator"
+            id="display-button"
+            to="/display"
             flat>
-            <v-icon left>icon-box</v-icon>
-            My Items
+            <v-icon left>icon-th-list</v-icon>
+            Detailed Display
           </v-btn>
-          <display-button v-if="$route.name !== 'Display'"></display-button>
         </v-toolbar-items>
 
         <!-- Sign in/out buttons -->
@@ -89,12 +96,6 @@
           </v-btn>
         </v-toolbar-items>
         <v-toolbar-items v-else>
-          <v-btn @click="signOut"
-            id="signout-button"
-            flat>
-            <v-icon left
-              color="signOut">icon-logout</v-icon> Sign Out
-          </v-btn>
           <v-btn id="profile-button"
             light
             to="/profile"
@@ -114,6 +115,13 @@
               </v-flex>
             </v-layout>
           </v-btn>
+
+          <v-btn @click="signOut"
+            id="signout-button"
+            flat>
+            <v-icon left
+              color="signOut">icon-logout</v-icon> Sign Out
+          </v-btn>
         </v-toolbar-items>
       </template>
     </v-toolbar>
@@ -124,20 +132,15 @@
         color="info"></v-progress-linear>
     </template>
 
-    <!-- Side nav drawer -->
-    <side-nav :mainDrawer="drawer"></side-nav>
   </div>
 </template>
 
 <script>
-import SideNav from './SideNav/Index'
 import DisplayButton from './DisplayButton'
 import { mapState, mapGetters, mapActions } from 'vuex'
-import { EventBus } from '../../main'
 
 export default {
   components: {
-    SideNav,
     DisplayButton
   },
   data () {
@@ -171,11 +174,6 @@ export default {
       })
       this.firebase.auth().signInWithRedirect(provider)
     }
-  },
-  created () {
-    EventBus.$on('toggleDrawer', function () {
-      this.drawer = false
-    }.bind(this))
   }
 }
 </script>
@@ -191,6 +189,9 @@ export default {
 }
 #profile-button {
   background-color: #fdc700 !important;
+}
+#display-button {
+  background-color: #006aad !important;
 }
 #profile-image {
   max-width: 30px;

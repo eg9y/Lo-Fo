@@ -8,12 +8,8 @@ export const toggleMapStillLoading = function ({ commit }, loadingStatus) {
   commit('toggleMapStillLoading', loadingStatus)
 }
 
-export const setAllLostItems = function ({ commit }, items) {
-  commit('setAllLostItems', items)
-}
-
-export const setAllFoundItems = function ({ commit }, items) {
-  commit('setAllFoundItems', items)
+export const setQueriedFirestoreItems = function ({ commit }, items) {
+  commit('setQueriedFirestoreItems', items)
 }
 
 export const pushToCollection = function ({ commit }, colAndDoc) {
@@ -60,31 +56,74 @@ export const setQueryTime = function ({ commit }, queryTime) {
   commit('setQueryTime', queryTime)
 }
 
+export const setQueryStatus = function ({ commit }, queryStatus) {
+  commit('setQueryStatus', queryStatus)
+}
+
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
   */
-export const updateCollection = function ({ commit }, collectionName) {
+export const updateCollection = function ({ commit }) {
   let documents = []
   this.state.db
-    .collection(collectionName)
+    .collection('items')
+    .orderBy('type')
+    .limit(5)
     .get()
     .then(items => {
       pushDocuments(items, documents)
-      if (collectionName === 'lost-items') {
-        commit('setAllLostItems', documents)
-      } else {
-        commit('setAllFoundItems', documents)
-      }
+      commit('setQueriedFirestoreItems', documents)
     })
     .catch(function (error) {
       console.log('Error getting documents: ', error)
     })
 }
 
+export const queryFirestoreItemsNext = function ({ commit }) {
+  // Get the last visible document
+  /* eslint-disable */
+  const lastVisible = this.state.queriedFirestoreItems[
+    this.state.queriedFirestoreItems.length - 1
+  ].type
+
+  // Construct a new query starting at this document,
+  // get the next 25 cities.
+  let documents = []
+  commit('setPage', this.state.queriedFirestoreItems[0].type)
+  this.state.db
+    .collection('items')
+    .orderBy('type')
+    .startAfter(lastVisible)
+    .limit(5)
+    .get()
+    .then(items => {
+      pushDocuments(items, documents)
+      commit('setQueriedFirestoreItems', documents)
+    })
+}
+
+export const queryFirestoreItemsPrev = function({ commit }) {
+  if (this.state.page.length === 0) {
+    return
+  }
+  let documents = []
+  this.state.db
+    .collection('items')
+    .orderBy('type')
+    .startAt(this.state.page[this.state.page.length - 1])
+    .limit(5)
+    .get()
+    .then(items => {
+      pushDocuments(items, documents)
+      commit('setPage', null)
+      commit('setQueriedFirestoreItems', documents)
+    })
+}
+
 /*
       Signs the user out
     */
-export const signOut = function () {
+export const signOut = function() {
   this.state.firebase
     .auth()
     .signOut()
@@ -92,7 +131,7 @@ export const signOut = function () {
       // Sign-out successful.
       this.signOut()
     })
-    .catch(function (error) {
+    .catch(function(error) {
       console.log(error)
     })
 }
@@ -100,28 +139,36 @@ export const signOut = function () {
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries based on query
   */
-export const updateCollectionQuery = function ({ commit }, queryAndPage) {
-  const { query, page, filters } = queryAndPage
+export const updateCollectionQuery = function({ commit }, queryAndPage) {
+  const { query, page, filters, attributes, hits } = queryAndPage
+  let hitsPerPage = 12
+  if (hits) {
+    hitsPerPage = hits
+  }
+  let attributesToRetrieve = [
+    'type',
+    'description',
+    'date',
+    'time',
+    'contactEmail',
+    'picture',
+    'coordinates',
+    'objectID',
+    'category'
+  ]
+  if (attributes) {
+    attributesToRetrieve = attributes
+  }
   const indexOptions = {
     query,
     page,
-    attributesToRetrieve: [
-      'type',
-      'description',
-      'date',
-      'time',
-      'contactEmail',
-      'picture',
-      'coordinates',
-      'objectID',
-      'category'
-    ],
-    hitsPerPage: 12
+    attributesToRetrieve,
+    hitsPerPage
   }
   if (filters) {
     indexOptions.filters = filters
   }
-  this.state.algoliaIndex.search(indexOptions, function searchDone (
+  this.state.algoliaIndex.search(indexOptions, function searchDone(
     err,
     content
   ) {

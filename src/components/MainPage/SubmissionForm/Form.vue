@@ -148,7 +148,7 @@ export default {
     'typeHint',
     'descriptionHint',
     'contactHint',
-    'collectionName',
+    'items',
     'selectedLatLng'
   ],
   data () {
@@ -222,12 +222,12 @@ export default {
       if (this.$v.$invalid) {
         return
       }
-      this.imageFile && this.active === 'tab-1' ? this.uploadPic(this.collectionName) : this.addDoc(this.collectionName)
+      this.imageFile && this.active === 'tab-1' ? this.uploadPic(this.items) : this.addDoc()
     },
     /*
       Adds the document to the database
     */
-    addDoc (collectionName) {
+    addDoc () {
       console.log('addDoc is running')
       this.feedback = null
       let collection
@@ -236,7 +236,7 @@ export default {
       } else {
         collection = 'lost'
       }
-      this.db.collection(collectionName).add({
+      this.db.collection('items').add({
         type: this.type,
         description: this.description,
         category: this.category,
@@ -263,8 +263,7 @@ export default {
               return console.log(err)
             }
           })
-          this.$store.dispatch('updateUserCollection', collectionName)
-          this.$store.dispatch('updateCollection', collectionName)
+          this.$store.dispatch('updateCollection')
         })
         this.toggleSubmission()
       })
@@ -296,7 +295,7 @@ export default {
       Uploads the picture to Storage and saves the url to data.imageURL
       NOTE: must be called before addDoc() if user is including a picture
     */
-    uploadPic (collectionName) {
+    uploadPic () {
       var name = this.user.uid + '-' + (+new Date()) + '-' + this.type // give picture unique name based on userID, timestamp, and item type
       console.log('uploadPic is running')
       const STORAGE = this.firebase.storage().ref()
@@ -311,10 +310,9 @@ export default {
         console.log("Error: couldn't upload picture,", error)
       }, () => {
         // Handle successful uploads on complete
-        console.log('uploadPic this.typez :', this.type)
         uploadTask.snapshot.ref.getDownloadURL().then(function (downloadURL) {
           self.imageURL = downloadURL
-          self.addDoc(collectionName)
+          self.addDoc()
           self.toggleSubmission()
         })
       })

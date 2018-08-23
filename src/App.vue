@@ -17,9 +17,6 @@ export default {
   components: {
     'nav-bar': Navbar
   },
-  data () {
-    return {}
-  },
   computed: {
     ...mapState([
       'firebase',
@@ -31,29 +28,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'updateUserCollection',
       'updateCollection',
       'stillLoading',
       'setUser',
-      'setAllLostItems',
-      'setAllFoundItems'
-    ]),
-    /*
-      Gets all documents by user from lost-items and found-items collection
-      and stores it in lost_items and found_items array
-    */
-    fetchAllUserDocuments () {
-      this.updateUserCollection('lost-items')
-      this.updateUserCollection('found-items')
-    },
-    /*
-      Gets all documents from lost-items and found-items collection
-      and stores it in lost_items and found_items array
-    */
-    fetchAllDocuments () {
-      this.updateCollection('lost-items')
-      this.updateCollection('found-items')
-    }
+      'setQueriedFirestoreItems'
+    ])
   },
   created () {
     this.firebase.auth().onAuthStateChanged(
@@ -62,34 +41,18 @@ export default {
         if (user) {
           // User is signed in.
           this.setUser(user)
-          this.fetchAllUserDocuments()
+          this.updateCollection()
         }
-        this.fetchAllDocuments()
       }
     )
 
-    this.db.collection('lost-items')
+    this.db.collection('items')
       .onSnapshot((querySnapshot) => {
-        let lostItems = []
+        let items = []
         querySnapshot.forEach(function (doc) {
-          lostItems.push(doc.data())
+          items.push(doc.data())
         })
-        this.setAllLostItems(lostItems)
-        if (this.user) {
-          this.updateUserCollection('lost-items')
-        }
-      })
-
-    this.db.collection('found-items')
-      .onSnapshot((querySnapshot) => {
-        let foundItems = []
-        querySnapshot.forEach(function (doc) {
-          foundItems.push(doc.data())
-        })
-        this.setAllFoundItems(foundItems)
-        if (this.user) {
-          this.updateUserCollection('found-items')
-        }
+        this.setQueriedFirestoreItems(items)
       })
   }
 }

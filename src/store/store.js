@@ -34,7 +34,8 @@ algoliaIndex.setSettings({
     'date',
     'time',
     'contactEmail',
-    'category'
+    'category',
+    'collection'
   ]
 })
 
@@ -47,8 +48,8 @@ export default new Vuex.Store({
   state: {
     stillLoading: true,
     mapStillLoading: true,
-    allLostItems: null,
-    allFoundItems: null,
+    queriedFirestoreItems: null,
+    page: [],
     queriedItems: null,
     nbHits: 0,
     nbPages: 0,
@@ -66,7 +67,8 @@ export default new Vuex.Store({
     popupClicked: false,
     queryDate: null,
     queryCategory: null,
-    queryTime: null
+    queryTime: null,
+    queryStatus: null
   },
   getters,
   mutations,
