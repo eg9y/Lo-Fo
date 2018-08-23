@@ -68,7 +68,7 @@ export const updateCollection = function ({ commit }) {
   this.state.db
     .collection('items')
     .orderBy('type')
-    .limit(5)
+    .limit(this.state.itemPerPageFirestore)
     .get()
     .then(items => {
       pushDocuments(items, documents)
@@ -94,7 +94,7 @@ export const queryFirestoreItemsNext = function ({ commit }) {
     .collection('items')
     .orderBy('type')
     .startAfter(lastVisible)
-    .limit(5)
+    .limit(this.state.itemPerPageFirestore)
     .get()
     .then(items => {
       pushDocuments(items, documents)
@@ -111,7 +111,7 @@ export const queryFirestoreItemsPrev = function({ commit }) {
     .collection('items')
     .orderBy('type')
     .startAt(this.state.page[this.state.page.length - 1])
-    .limit(5)
+    .limit(this.state.itemPerPageFirestore)
     .get()
     .then(items => {
       pushDocuments(items, documents)
@@ -141,7 +141,7 @@ export const signOut = function() {
   */
 export const updateCollectionQuery = function({ commit }, queryAndPage) {
   const { query, page, filters, attributes, hits } = queryAndPage
-  let hitsPerPage = 12
+  let hitsPerPage = 20
   if (hits) {
     hitsPerPage = hits
   }

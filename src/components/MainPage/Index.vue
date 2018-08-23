@@ -41,6 +41,12 @@
 
         <!-- found items markers -->
         <ItemsMarkers></ItemsMarkers>
+
+        <!-- selected marker -->
+        <l-marker v-if="selectedMarker"
+          :icon="$options.icon(selectedMarker.collection)"
+          :lat-lng="selectedMarker.coordinates">
+        </l-marker>
       </v-marker-cluster>
       <!-- selected location -->
       <l-marker v-if="selectedLatLng"
@@ -86,6 +92,17 @@ const MAXLNG = -122.04299926757812
 const MINLNG = -122.07372665405273
 
 export default {
+  icon (collection) {
+    let url = 'https://firebasestorage.googleapis.com/v0/b/lost-and-found-ddb76.appspot.com/o/found_marker.png?alt=media&token=819906a9-f325-49d3-826f-2800588d8277'
+    if (collection === 'lost') {
+      url = 'https://firebasestorage.googleapis.com/v0/b/lost-and-found-ddb76.appspot.com/o/lost_marker.png?alt=media&token=a84b3255-0d57-4ec3-9969-06242ba745ef'
+    }
+    return L.icon({
+      iconUrl: url,
+      iconSize: [24, 24],
+      iconAnchor: [20, 20]
+    })
+  },
   boundary: {
     'type': 'Polygon',
     'coordinates': [

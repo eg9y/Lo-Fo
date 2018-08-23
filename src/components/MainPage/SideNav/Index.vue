@@ -10,6 +10,7 @@
         <v-layout>
           <v-flex xs6>
             <v-btn @click="displayLost"
+              :disabled="!foundToggle"
               color="red"
               block>
               <v-icon v-if="lostToggle">icon-check</v-icon>
@@ -19,6 +20,7 @@
           </v-flex>
           <v-flex xs6>
             <v-btn @click="displayFound"
+              :disabled="!lostToggle"
               color="green"
               block>
               <v-icon v-if="foundToggle">icon-check</v-icon>
@@ -76,7 +78,8 @@ export default {
       'foundToggle',
       'stillLoading',
       'map',
-      'queriedFirestoreItems'
+      'queriedFirestoreItems',
+      'selectedMarker'
     ]),
     pageZeroIndexed () {
       return this.page - 1

@@ -1,7 +1,7 @@
 <template>
   <div>
     <individual-marker v-for="item in queriedFirestoreItems"
-      v-if="filterToggle(item)"
+      v-if="filterToggle(item) && (!selectedMarker || (selectedMarker && item.id !== selectedMarker.id))"
       :key="item.id"
       :item="item">
     </individual-marker>
@@ -22,7 +22,8 @@ export default {
       'isUserLoggedIn',
       'user',
       'foundToggle',
-      'lostToggle'
+      'lostToggle',
+      'selectedMarker'
     ])
   },
   methods: {
