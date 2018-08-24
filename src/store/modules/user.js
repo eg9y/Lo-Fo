@@ -1,9 +1,10 @@
-import {pushDocuments} from '../helperFunction'
+import { pushDocuments } from '../helperFunction'
 
 const state = {
   user: null, // user object
   lost_items: null,
-  found_items: null
+  found_items: null,
+  myMarkers: null
 }
 
 const getters = {
@@ -18,6 +19,9 @@ const getters = {
   },
   found_items (state) {
     return state.found_items
+  },
+  myMarkers (state) {
+    return state.myMarkers
   }
 }
 
@@ -35,6 +39,9 @@ const mutations = {
   },
   setFoundItems (state, items) {
     state.found_items = items
+  },
+  setMyMarkers (state, markers) {
+    state.myMarkers = markers
   }
 }
 
@@ -61,6 +68,20 @@ const actions = {
         } else {
           commit('setFoundItems', documents)
         }
+      })
+      .catch(function (error) {
+        console.log('Error getting documents: ', error)
+      })
+  },
+  getMyMarkers ({ state, commit }) {
+    let documents = []
+    this.state.db
+      .collection('items')
+      .where('userID', '==', state.user.uid)
+      .get()
+      .then(items => {
+        pushDocuments(items, documents)
+        commit('setMyMarkers', documents)
       })
       .catch(function (error) {
         console.log('Error getting documents: ', error)

@@ -2,7 +2,8 @@
 
 <template>
   <v-layout>
-    <v-flex class="mb-2 mt-2">
+    <v-flex class="mb-2 mt-2"
+      :class="classes">
       <div class="white elevation-2">
         <v-toolbar flat
           dense
@@ -23,6 +24,6 @@
 
 <script>
 export default {
-  props: ['title']
+  props: ['title', 'classes']
 }
 </script>

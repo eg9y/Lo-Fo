@@ -179,7 +179,8 @@ export default {
       'setAllowPopupOnZoom',
       'setMap',
       'setSelectedMarker',
-      'setPopupClicked'
+      'setPopupClicked',
+      'getMarkerById'
     ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
@@ -254,17 +255,11 @@ export default {
       and x is 'l' for items in the lost collection and 'f' for items in the found collection
     */
     setPopup (param) {
-      if (!this.selectedMarker && this.queriedFirestoreItems && param) {
-        const itemID = param.substr(2)
-        if (!this.selectedMarker) {
-          this.queriedFirestoreItems.forEach(item => {
-            if (item.id === itemID) {
-              this.setSelectedMarker(item)
-            }
-          })
-        }
+      if (param) {
+        this.getMarkerById(param)
       }
       if (this.selectedMarker) {
+        this.map.setView(L.latLng(this.selectedMarker.coordinates.lat, this.selectedMarker.coordinates.lng), 20)
         const label = this.selectedMarker.collection === 'lost' ? 'Lost:' : 'Found:'
         const timestamp = this.selectedMarker.time + ' ' + this.selectedMarker.date
         const container = L.DomUtil.create('div')
@@ -303,7 +298,7 @@ export default {
       immediate: true,
       handler (param) {
         if (param) {
-          // this.setPopup(param)
+          this.setPopup(param)
         }
       }
     },

@@ -136,13 +136,9 @@
 </template>
 
 <script>
-import DisplayButton from './DisplayButton'
 import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: {
-    DisplayButton
-  },
   data () {
     return {
       drawer: false

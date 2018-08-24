@@ -143,6 +143,12 @@
       "css": "cancel",
       "code": 59407,
       "src": "typicons"
+    },
+    {
+      "uid": "c8585e1e5b0467f28b70bce765d5840c",
+      "css": "docs",
+      "code": 61637,
+      "src": "fontawesome"
     }
   ]
 }

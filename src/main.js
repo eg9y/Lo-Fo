@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
 import App from './App'
 // Import vue-progressive-image for progressive image loading
 import VueProgressiveImage from 'vue-progressive-image'
@@ -26,6 +27,9 @@ L.Icon.Default.mergeOptions({
   iconUrl: require('../static/png/map-marker.png'),
   iconSize: [24, 24]
 })
+
+// Copy to clipboard function
+Vue.use(VueClipboard)
 
 Vue.component('panel', Panel)
 

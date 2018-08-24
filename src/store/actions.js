@@ -79,6 +79,23 @@ export const updateCollection = function ({ commit }) {
     })
 }
 
+/*
+    Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
+  */
+export const getMarkerById = function ({ commit }, id) {
+  this.state.db
+    .collection('items')
+    .doc(id)
+    .get()
+    .then(item => {
+      console.log('item', item)
+      commit('setSelectedMarker', item.data())
+    })
+    .catch(function (error) {
+      console.log('Error getting documents: ', error)
+    })
+}
+
 export const queryFirestoreItemsNext = function ({ commit }) {
   // Get the last visible document
   /* eslint-disable */
@@ -181,5 +198,15 @@ export const updateCollectionQuery = function({ commit }, queryAndPage) {
       nbPages: content.nbPages,
       nbHits: content.nbHits
     })
+  })
+}
+
+export const updateItem = function({ commit }, item) {
+  const newItem = item
+  newItem.objectID = newItem.id
+  delete newItem.id
+  this.state.algoliaIndex.saveObject(newItem, function(err, content) {
+    if (err) throw err
+    console.log(content)
   })
 }

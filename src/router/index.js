@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import LeafletMap from '@/components/MainPage/Index'
 import Display from '@/components/Display/Index'
 import Profile from '@/components/Profile/Index'
+import Item from '@/components/Item/Index'
 
 Vue.use(Router)
 
@@ -25,8 +26,14 @@ export default new Router({
       component: Profile
     },
     {
+      path: '/detail/:id',
+      name: 'Item',
+      props: true,
+      component: Item
+    },
+    {
       path: '/:id',
-      redirect: '/',
+      name: 'MapId',
       props: true,
       component: LeafletMap
     }
