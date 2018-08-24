@@ -41,9 +41,6 @@ export default {
     setMarker () {
       this.setPopupClicked(true)
       this.setSelectedMarker(this.item)
-      const itemID = this.item.id
-      const collectionType = this.item.collection === 'lost' ? 'l' : 'f'
-      this.$router.push(`/${collectionType}-${itemID}`)
     }
   }
 }

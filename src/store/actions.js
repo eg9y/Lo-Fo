@@ -60,6 +60,10 @@ export const setQueryStatus = function ({ commit }, queryStatus) {
   commit('setQueryStatus', queryStatus)
 }
 
+export const setFromSideNav = function ({ commit }, fromSideNav) {
+  commit('setFromSideNav', fromSideNav)
+}
+
 /*
     Fetches new submissions from firebase storage and updates the local copy of all lost/found entries
   */
@@ -88,7 +92,6 @@ export const getMarkerById = function ({ commit }, id) {
     .doc(id)
     .get()
     .then(item => {
-      console.log('item', item)
       commit('setSelectedMarker', item.data())
     })
     .catch(function (error) {

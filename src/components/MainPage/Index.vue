@@ -134,7 +134,7 @@ export default {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       maxBounds: L.latLngBounds([
         [37.018, -122.1], // top-left
-        [36.96, -122.02] // bottom-right
+        [36.96, -121.9995] // bottom-right
       ]),
       // lat and lng are used for location
       selectedLatLng: null,
@@ -163,7 +163,8 @@ export default {
       'zoom',
       'selectedMarker',
       'map',
-      'popupClicked'
+      'popupClicked',
+      'fromSideNav'
     ]),
     accurateLatLng () {
       const point = this.map.latLngToContainerPoint(this.selectedLatLng)
@@ -175,12 +176,11 @@ export default {
     ...mapActions([
       'updateCollection',
       'toggleCluster',
-      'setZoomEnd',
-      'setAllowPopupOnZoom',
       'setMap',
       'setSelectedMarker',
       'setPopupClicked',
-      'getMarkerById'
+      'getMarkerById',
+      'setFromSideNav'
     ]),
     /*
       Updates the location for a new potential marker, and opens the submission form
@@ -259,7 +259,10 @@ export default {
         this.getMarkerById(param)
       }
       if (this.selectedMarker) {
-        this.map.setView(L.latLng(this.selectedMarker.coordinates.lat, this.selectedMarker.coordinates.lng), 20)
+        if (this.$route.path !== '/' && this.fromSideNav) {
+          this.map.setView(L.latLng(this.selectedMarker.coordinates.lat, this.selectedMarker.coordinates.lng), 20)
+          this.setFromSideNav(false)
+        }
         const label = this.selectedMarker.collection === 'lost' ? 'Lost:' : 'Found:'
         const timestamp = this.selectedMarker.time + ' ' + this.selectedMarker.date
         const container = L.DomUtil.create('div')
@@ -332,7 +335,6 @@ export default {
       }
       this.setMap(this.$refs.map.mapObject)
       this.setPopup()
-      // this.map.locate({ setView: true })
       this.map.on('locationfound', this.onLocationFound)
     })
   },

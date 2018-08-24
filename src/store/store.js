@@ -69,7 +69,8 @@ export default new Vuex.Store({
     queryCategory: null,
     queryTime: null,
     queryStatus: null,
-    itemPerPageFirestore: 15
+    itemPerPageFirestore: 15,
+    fromSideNav: false
   },
   getters,
   mutations,

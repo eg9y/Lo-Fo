@@ -6,16 +6,16 @@ Todo:
     ✔ Categories @started(18-08-21 14:06) @done(18-08-21 18:45) @lasted(4h39m34s)
     ✔ Time @started(18-08-21 19:01) @done(18-08-21 22:12) @lasted(3h11m55s)
   ☐ Revamp Organization
-    ☐ Display -> List Display
-    ☐ Display -> remove Lost/Found filter
-    ☐ Put side bar (display by default, but toggleable) to list all items
-      ☐ Only show title and compressed picture
-      ☐ Locate and Details button
-      ☐ filter my items, lost items, found items
+    ✔ Display -> List Display @done(18-08-24 11:29)
+    ✔ Display -> remove Lost/Found filter @done(18-08-24 11:29)
+    ✔ Put side bar (display by default, but toggleable) to list all items @done(18-08-24 11:29)
+      ✔ Only show title and compressed picture @done(18-08-24 11:29)
+      ✔ Locate and Details button @done(18-08-24 11:29)
+      ✔ filter my items, lost items, found items @done(18-08-24 11:29)
   ☐ Connect with FB
-  ☐ Individual page
-    ☐ Details will show type, description, color, basically everything
-    ☐ Have tiny links
+  ✔ Individual page @done(18-08-24 11:29)
+    ✔ Details will show type, description, color, basically everything @done(18-08-24 11:29)
+    ✔ Have tiny links @done(18-08-24 11:29)
     ☐ Share button for fb
     ☐ Main purpose is for fb users to easily include the link when they lost/found something
   ☐ Chat function/ encrypted email

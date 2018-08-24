@@ -93,7 +93,8 @@ export default {
     ...mapActions([
       'setSelectedMarker',
       'queryFirestoreItemsNext',
-      'queryFirestoreItemsPrev'
+      'queryFirestoreItemsPrev',
+      'setFromSideNav'
     ]),
     focus (submission) {
       this.setSelectedMarker(submission)
@@ -101,6 +102,7 @@ export default {
       this.map.setView(L.latLng(submission.coordinates.lat, submission.coordinates.lng), 20)
       const symbol = submission.collection === 'lost' ? 'l' : 'f'
       this.$router.push(`/${symbol}-${submission.id}`)
+      this.setFromSideNav(true)
     },
     setColor (collection) {
       return collection === 'lost' ? 'red darken-2' : 'green darken-2'

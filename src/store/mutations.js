@@ -91,3 +91,7 @@ export const setQueryTime = function (state, queryTime) {
 export const setQueryStatus = function (state, queryStatus) {
   state.queryStatus = queryStatus
 }
+
+export const setFromSideNav = function (state, fromSideNav) {
+  state.fromSideNav = fromSideNav
+}

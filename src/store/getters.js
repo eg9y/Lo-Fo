@@ -36,3 +36,5 @@ export const queryStatus = ({ queryStatus }) => queryStatus
 
 export const queriedFirestoreItems = ({ queriedFirestoreItems }) =>
   queriedFirestoreItems
+
+export const fromSideNav = ({ fromSideNav }) => fromSideNav
