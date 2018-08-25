@@ -23,7 +23,8 @@ export default {
       'db'
     ]),
     ...mapGetters([
-      'user'
+      'user',
+      'itemPerPageFirestore'
     ])
   },
   methods: {
@@ -47,6 +48,8 @@ export default {
     )
 
     this.db.collection('items')
+      .orderBy('type')
+      .limit(this.itemPerPageFirestore)
       .onSnapshot((querySnapshot) => {
         let items = []
         querySnapshot.forEach(function (doc) {

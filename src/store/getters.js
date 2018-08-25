@@ -38,3 +38,6 @@ export const queriedFirestoreItems = ({ queriedFirestoreItems }) =>
   queriedFirestoreItems
 
 export const fromSideNav = ({ fromSideNav }) => fromSideNav
+
+export const itemPerPageFirestore = ({ itemPerPageFirestore }) =>
+  itemPerPageFirestore

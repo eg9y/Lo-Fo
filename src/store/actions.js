@@ -69,6 +69,7 @@ export const setFromSideNav = function ({ commit }, fromSideNav) {
   */
 export const updateCollection = function ({ commit }) {
   let documents = []
+
   this.state.db
     .collection('items')
     .orderBy('type')
@@ -102,6 +103,14 @@ export const getMarkerById = function ({ commit }, id) {
 export const queryFirestoreItemsNext = function ({ commit }) {
   // Get the last visible document
   /* eslint-disable */
+  if (
+    !this.state.queriedFirestoreItems[
+      this.state.queriedFirestoreItems.length - 1
+    ]
+  ) {
+    commit('setQueriedFirestoreItems', [])
+    return
+  }
   const lastVisible = this.state.queriedFirestoreItems[
     this.state.queriedFirestoreItems.length - 1
   ].type
