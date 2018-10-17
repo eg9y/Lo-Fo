@@ -1,4 +1,5 @@
 # ~~Lost~~ and Found
+
 > Pin your lost and found items in the UCSC campus map!
 
 [![Build Status](https://travis-ci.org/VVNoodle/Lo-Fo.svg?branch=BACKUP-MASTER)](https://travis-ci.org/VVNoodle/Lo-Fo) ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg) [![Coverage Status](https://coveralls.io/repos/github/VVNoodle/LoFo/badge.svg)](https://coveralls.io/github/VVNoodle/LoFo)
@@ -8,30 +9,36 @@ The idea began with the abundance of lost/found posts in the official UCSC Faceb
 ![Cite Homepage](https://i.imgur.com/b0WYjKG.png "Cite Homepage")
 
 # Table of content
+
 - [Getting Started](#getting-started)
-  * [Installation](#installation)
+  - [Installation](#installation)
 - [Development Setup](#development-setup)
-  * [Running the tests](#running-the-tests)
-  * [Deployment](#deployment)
+  - [Running the tests](#running-the-tests)
+  - [Deployment](#deployment)
 - [Built With](#built-with)
 - [Contributing](#contributing)
 - [Authors](#authors)
 
 # Getting Started
+
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ## Installation
+
 1. Install Node.js
 2. In your preferred directory, clone this repository
 3. Install dependencies via NPM:
+
 ```
 npm install --only=production
 ```
+
 4. create a `dev.env.js` file in the `config` folder, and fill in the following:
+
 ```javascript
-'use strict'
-const merge = require('webpack-merge')
-const prodEnv = require('./prod.env')
+"use strict";
+const merge = require("webpack-merge");
+const prodEnv = require("./prod.env");
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
@@ -40,12 +47,14 @@ module.exports = merge(prodEnv, {
   DB_URL: '"YOUR FIREBASE DB URL"',
   PROJECT_ID: '"YOUR FIREBASE PROJECT ID"',
   STORAGE_BUCKET: '"YOUR FIREBASE STORAGE BUCKET"',
-  MESSAGING_SENDER_ID: '"YOUR MESSAGIN SENDER ID"',
-})
+  MESSAGING_SENDER_ID: '"YOUR MESSAGIN SENDER ID"'
+});
 ```
-These environment variables are used to initialize firebase in `src/firebase/init.js`. Thefore, you need to create your own firebase project at [firebase console](https://console.firebase.google.com). To build for production, you can also add `prod.env.js` in `config` and fill in the following: 
+
+These environment variables are used to initialize firebase in `src/firebase/init.js`. Thefore, you need to create your own firebase project at [firebase console](https://console.firebase.google.com). To build for production, you can also add `prod.env.js` in `config` and fill in the following:
+
 ```javascript
-'use strict'
+"use strict";
 
 module.exports = {
   NODE_ENV: '"production"',
@@ -54,38 +63,50 @@ module.exports = {
   DB_URL: '"YOUR FIREBASE DB URL"',
   PROJECT_ID: '"YOUR FIREBASE PROJECT ID"',
   STORAGE_BUCKET: '"YOUR FIREBASE STORAGE BUCKET"',
-  MESSAGING_SENDER_ID: '"YOUR MESSAGIN SENDER ID"',
-}
+  MESSAGING_SENDER_ID: '"YOUR MESSAGIN SENDER ID"'
+};
 ```
+
 5. Run the application locally (hosted at localhost:8080):
+
 ```
 npm start
 ```
 
 # Development Setup
+
 Install all dependecies (including dev dependencies) via NPM:
+
 ```
 npm install
 ```
+
 ## Running the tests
+
 tests can be found in the `test` folder. We chose `Mocha` as our testing framework, and `Karma` as test runner. Run the automated test by doing:
+
 ```
 npm install
 npm run unit
 ```
 
 # Built With
-* [Vue.js](https://vuejs.org) - Progressive JavaScript Framework
-* [Firestore](https://firebase.google.com/docs/firestore/) - Realtime Database
-* [LeafletJS](https://leafletjs.com) - Maps API
+
+- [Vue.js](https://vuejs.org) - Progressive JavaScript Framework
+- [Firestore](https://firebase.google.com/docs/firestore/) - Realtime Database
+- [LeafletJS](https://leafletjs.com) - Maps API
 
 # Contributing
+
 Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us (Doc will be written soon).
 
 # Authors
-* Geoff Huang
-* Lily Nguyen
-* Chengyu Jiang
-* Wan Fong
-* Egan Bisma
-* Peter Eskraus
+
+- Geoff Huang
+- Lily Nguyen
+- Chengyu Jiang
+- Wan Fong
+- Egan Bisma
+- Peter Eskraus
+
+:)
