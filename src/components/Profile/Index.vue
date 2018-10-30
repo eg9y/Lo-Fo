@@ -96,7 +96,7 @@
                         :to="`/detail/${item.id}`">Go to detail link</v-btn>
 
                       <v-btn slot="activator"
-                        v-clipboard:copy="`localhost:8080/detail/${item.id}`"
+                        v-clipboard:copy="`lostfound.ml/detail/${item.id}`"
                         v-clipboard:error="onError"
                         @click="triggerAlert('Copied!')"
                         flat
@@ -108,7 +108,7 @@
                       <v-btn color="green lighten-2"
                         :to="`/${item.id}`">Go to map link</v-btn>
                       <v-btn color="grey"
-                        v-clipboard:copy="`localhost:8080/${item.id}`"
+                        v-clipboard:copy="`lostfound.ml/${item.id}`"
                         v-clipboard:error="onError"
                         @click="triggerAlert('Copied!')"
                         flat

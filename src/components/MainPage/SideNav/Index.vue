@@ -37,7 +37,7 @@
             <v-btn block
               :color="setColor(item.collection)"
               @click="focus(item)">
-              {{item.category}} | {{ item.type }}
+              {{item.category}} | {{ item.type|truncate }}
             </v-btn>
           </v-flex>
         </v-layout>
@@ -132,6 +132,14 @@ export default {
       } else {
         this.setFoundToggle(true)
       }
+    }
+  },
+  filters: {
+    truncate (value) {
+      if (value.length >= 27) {
+        return value.substring(0, 17) + '...'
+      }
+      return value
     }
   }
 }
