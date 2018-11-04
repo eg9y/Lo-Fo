@@ -94,7 +94,7 @@ npm run unit
 
 - [Vue.js](https://vuejs.org) - Progressive JavaScript Framework
 - [Firestore](https://firebase.google.com/docs/firestore/) - Realtime Database
-- [LeafletJS](https://leafletjs.com) - Maps API
+- [LeafletJS](https://leafletjs.com) - Maps API (migrated from [Google Maps API](https://www.eventsofa.de/campus/migrating-away-from-google-maps-and-cutting-costs-by-99/) )
 
 # Contributing
 
